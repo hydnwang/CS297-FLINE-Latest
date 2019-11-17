@@ -7,8 +7,8 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Autocomplete } from '@material-ui/lab';
-import MajorList from './major_list';
-import InterestList from './interest_list';
+import MajorList from '../../components/user/major_list';
+import InterestList from '../../components/user/interest_list';
 import ButtonLink from '../../components/button_link';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
