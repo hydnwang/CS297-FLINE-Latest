@@ -1,4 +1,4 @@
-## CS296P Project: FLINE
+## CS297P Project: FLINE
 
 This app is made for students to make friends with each other around their campus based on our recommendation system.
 
