@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
+import fetch from 'isomorphic-unfetch';
 
 const useStyles = makeStyles(theme => ({
   form: {},
@@ -37,6 +38,19 @@ function FormComponent() {
     event.preventDefault()
     console.log("email: " + values.email);
     console.log("password: " + values.password);
+    fetch('/api/users/login', {
+      method: 'POST', 
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json', 
+      }, 
+      body: JSON.stringify({
+        email: values.email
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log("[data]" + JSON.stringify(data)))
+    .catch(err => console.log("[err]" + err))
   };
   return (
     <form className={classes.form} noValidate autoComplete="off">
