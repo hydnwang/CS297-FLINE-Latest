@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import SchoolIcon from '@material-ui/icons/School';
+import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import ButtonLink from '../components/button_link';
@@ -47,6 +48,9 @@ export default ({ loginStatus='Login' }) => {
             </Button>
             <Button component={ButtonLink} className={classes.link} href={'/course/index'}>
               <SchoolIcon className={classes.icon} /> Courses
+            </Button>
+            <Button component={ButtonLink} className={classes.link} href={'/course/sechdule'}>
+              <EventIcon className={classes.icon} /> Sechdule
             </Button>
             <Button component={ButtonLink} className={classes.link} href={'/user/profile'}>
               <PersonIcon className={classes.icon} /> Profile
