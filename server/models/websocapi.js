@@ -173,7 +173,7 @@ function parse(XMLBody) {
             }
         }
     }
-    console.log("str:"+str);
+    // console.log("str:"+str);
     return str;
 }
 

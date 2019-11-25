@@ -21,11 +21,11 @@ function parseData(str){
     var objs=[];
     if(str.length>0){
       var temp = str.substring(1,str.length-1);
-    console.log("temp:"+temp);
+    // console.log("temp:"+temp);
     var courses=temp.split("}{");
     courses.forEach(element=>{
         element='{'+element+'}';
-        console.log("element:"+element);
+        // console.log("element:"+element);
         var obj = JSON.parse(element);
         objs.push(obj);
     })
@@ -49,9 +49,5 @@ class ItemList extends Component {
     );
   }
 }
-
-ItemList.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default ItemList;
