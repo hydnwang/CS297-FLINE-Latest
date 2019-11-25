@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -6,35 +6,52 @@ import Select from '@material-ui/core/Select';
 import Dept from '../../../components/course/depts';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
+import CourseTable from './UsersTable'
+const useStyles = makeStyles(theme => ({
+    root: {
+      padding: theme.spacing(3),
+      marginLeft:100,
+    },
+    content: {
+      marginTop: theme.spacing(2)
+    }
+  }));
 
+function parseData(str){
+    var objs=[];
+    if(str.length>0){
+      var temp = str.substring(1,str.length-1);
+    console.log("temp:"+temp);
+    var courses=temp.split("}{");
+    courses.forEach(element=>{
+        element='{'+element+'}';
+        console.log("element:"+element);
+        var obj = JSON.parse(element);
+        objs.push(obj);
+    })
+    }
+    return objs;
+}
 
-class DeptBar extends Component {
+class ItemList extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    var partten ='}{';
-    var length = this.props.data.length;
     var str = this.props.data;
-    var objs=[];
-    if(length>0){
-        str.substring(1,str.length);
-        var courses=str.split(partten);
-        courses.forEach(element=>{
-            element='{'+'}';
-            var obj = JSON.parse(element);
-            objs.push(obj);
-        })
-    }
     return (
       <FormControl 
       fullWidth
       >
-          {str}
+        <CourseTable users={ parseData(str)} />
+        {/* {str} */}
       </FormControl>
     );
   }
 }
 
-export default DeptBar;
+ItemList.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default ItemList;

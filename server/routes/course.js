@@ -12,8 +12,8 @@ router.get('/', function(req, res) {
 		GE:req.query.GE,
 		courseCodes: req.query.courseCodes};
 		courseModel.callWebSocAPI(opt,function(result){
-			console.log("data:"+JSON.stringify(result));
-			res.send({apiResponse:JSON.stringify(result)});
+			console.log("data:"+result);
+			res.send({apiResponse:result});
 		});
 })
 
