@@ -5,7 +5,7 @@ var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'password',
-  database: 'fline'
+  database: 'fline_2'
 });
 
 module.exports = connection;

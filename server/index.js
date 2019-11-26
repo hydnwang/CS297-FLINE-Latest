@@ -14,7 +14,7 @@ app.prepare().then(() => {
   const server = express()
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
-  server.use('/api/', require('./routes'))
+  server.use('/api', require('./routes'))
 
   server.get('*', handle)
   server.listen(PORT, err => {
