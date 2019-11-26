@@ -18,4 +18,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `privacy` int(10) unsigned DEFAULT '0',
   `role` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-); 
+);
+
+CREATE TABLE IF NOT EXISTS friendship (
+    from_id INT REFERENCES users(id),
+    to_id INT REFERENCES users(id),
+    status ENUM('pending', 'friend') NOT NULL,
+    PRIMARY KEY (from_id, to_id)
+);
