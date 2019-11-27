@@ -37,7 +37,7 @@ function FormComponent() {
     username: '',
     password: '',
     major: '',
-    interests: '[]',
+    interests: [],
     error: '',
     usernameErr: '',
     passwordErr: '',
