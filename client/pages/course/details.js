@@ -17,36 +17,46 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Account = () => {
-  const classes = useStyles();
+class Details extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          user_id: this.props.token,
+          currentDate: new Date('2019-11-27'),
+        };
+      }
 
-  return (
-    <div className={classes.root}>
-      <Grid
-        container
-        spacing={4}
-      >
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xl={4}
-          xs={12}
-        >
-          <AccountProfile />
-        </Grid>
-        <Grid
-          item
-          lg={8}
-          md={6}
-          xl={8}
-          xs={12}
-        >
-          <AccountDetails />
-        </Grid>
-      </Grid>
-    </div>
-  );
+    render(){
+        return (
+            <div className={classes.root}>
+              <Grid
+                container
+                spacing={4}
+              >
+                <Grid
+                  item
+                  lg={4}
+                  md={6}
+                  xl={4}
+                  xs={12}
+                >
+                  <AccountProfile />
+                </Grid>
+                <Grid
+                  item
+                  lg={8}
+                  md={6}
+                  xl={8}
+                  xs={12}
+                >
+                  <Enrollment courseId={courseId} uid={this.state.user_id}/>
+                </Grid>
+              </Grid>
+            </div>
+          );
+    }
+  
 };
 
-export default Account;
+export default withAuthSync(Details);
