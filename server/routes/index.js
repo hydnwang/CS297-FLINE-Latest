@@ -7,5 +7,7 @@ router.get('/status', function (req, res) {
 
 router.use('/users', require('./users'))
 router.use('/course', require('./course'))
+router.use('/registration', require('./registration'))
+router.use('/schedule',require('./schedule'))
 router.use('/testAPI',require('./testAPI'))
 module.exports = router
