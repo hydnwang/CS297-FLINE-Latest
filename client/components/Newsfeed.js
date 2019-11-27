@@ -66,7 +66,7 @@ export default function Newsfeed(props) {
   const handleClick = (event, idx, course_id) => {
     setSelectedIndex(idx);
     setCourse(course_id);
-    console.log("setCourse course_id="+ course_id);
+    // console.log("setCourse course_id="+ course_id);
   };
 
   React.useEffect(() => {
