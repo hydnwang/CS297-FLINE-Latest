@@ -3,6 +3,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { withAuthSync } from '../../../utils/auth';
 
 class TermSelector extends Component {
   constructor(props) {
@@ -84,4 +85,4 @@ class TermSelector extends Component {
   }
 }
 
-export default TermSelector;
+export default withAuthSync(TermSelector);

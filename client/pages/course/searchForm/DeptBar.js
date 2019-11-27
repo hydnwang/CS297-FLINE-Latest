@@ -6,8 +6,7 @@ import Select from '@material-ui/core/Select';
 import Dept from '../../../components/course/depts';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
-
-
+import { withAuthSync } from '../../../utils/auth';
 class DeptBar extends Component {
   constructor(props) {
     super(props);
@@ -59,4 +58,4 @@ class DeptBar extends Component {
   }
 }
 
-export default DeptBar;
+export default withAuthSync(DeptBar);

@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ge from '../../../components/course/ge';
+import { withAuthSync } from '../../../utils/auth';
 
 class GESelector extends Component {
   constructor(props) {
@@ -48,4 +49,4 @@ class GESelector extends Component {
   }
 }
 
-export default GESelector;
+export default withAuthSync(GESelector);

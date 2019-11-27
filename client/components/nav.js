@@ -72,8 +72,8 @@ export default ({ loginStatus = false, currentPage }) => {
             <Button component={ButtonLink} className={classes.link} href={'/course/index'}>
               <SchoolIcon className={classes.icon} /> Courses
             </Button>
-            <Button component={ButtonLink} className={classes.link} href={'/course/sechdule'}>
-              <EventIcon className={classes.icon} /> Sechdule
+            <Button component={ButtonLink} className={classes.link} href={'/course/schedule'}>
+              <EventIcon className={classes.icon} /> Schedule
             </Button>
             <Button component={ButtonLink} className={classes.link} href={'/user/profile'}>
               <PersonIcon className={classes.icon} /> Profile

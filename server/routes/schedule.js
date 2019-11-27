@@ -8,9 +8,9 @@ router.get('/', function(req, res) {
     // res.send('API is working properly');
     var userId = parseInt(req.query.user_id);
     console.log(userId);
-    res.send(ScheduleModel.getUserData(userId, (data) => {
+    ScheduleModel.getUserData(userId, (data) => {
         res.send(data)
-      }));
+      });
 })
 
 module.exports = router

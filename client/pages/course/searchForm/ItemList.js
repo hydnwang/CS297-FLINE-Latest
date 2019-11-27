@@ -7,6 +7,8 @@ import Dept from '../../../components/course/depts';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import CourseTable from './UsersTable'
+import { withAuthSync } from '../../../utils/auth';
+
 const useStyles = makeStyles(theme => ({
     root: {
       padding: theme.spacing(3),
@@ -50,4 +52,4 @@ class ItemList extends Component {
   }
 }
 
-export default ItemList;
+export default withAuthSync(ItemList);

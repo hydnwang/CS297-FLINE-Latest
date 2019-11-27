@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { TextField } from '@material-ui/core';
+import { withAuthSync } from '../../../utils/auth';
 
 class CourseCodeSearchBar extends Component {
   constructor(props) {
@@ -32,4 +33,4 @@ class CourseCodeSearchBar extends Component {
   }
 }
 
-export default CourseCodeSearchBar;
+export default withAuthSync(CourseCodeSearchBar);

@@ -4,6 +4,7 @@ import defaultDepts from '../../../components/course/depts';
 import FormControl from '@material-ui/core/FormControl';
 import { isMobile } from 'react-device-detect';
 import PropTypes from 'prop-types';
+import { withAuthSync } from '../../../utils/auth';
 
 class DeptSearchBar extends React.Component {
   constructor(props) {
@@ -108,4 +109,4 @@ DeptSearchBar.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.bool,
 };
-export default DeptSearchBar;
+export default withAuthSync(DeptSearchBar);

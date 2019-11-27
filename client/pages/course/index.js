@@ -12,8 +12,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 const fetch = require("node-fetch");
 import MenuItem from '@material-ui/core/MenuItem';
-import DeptBar from './searchForm/DeptBar'
-import ItemList from './searchForm/ItemList'
+import DeptBar from './searchForm/DeptBar';
+import ItemList from './searchForm/ItemList';
+import { withAuthSync } from '../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   container: {

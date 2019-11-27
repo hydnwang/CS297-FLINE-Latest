@@ -18,6 +18,7 @@ import {
   Typography,
   TablePagination
 } from '@material-ui/core';
+import { withAuthSync } from '../../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,8 +82,9 @@ const parseTime=(str)=>{
   console.log("parseTime:"+res);
   return res;
 };
-const handleSelectOne = (event, course_id,course_title,course_type, meeting_time) => {
-  const user_id = 101;
+const handleSelectOne = (event, course_id,course_title,course_type, meeting_time,user_id) => {
+  
+  if(user_id==undefined) user_id=4;
   var times="";
   meeting_time.forEach(item=>{
     if(item.length ==2){
@@ -126,7 +128,8 @@ const handleSelectOne = (event, course_id,course_title,course_type, meeting_time
 
 const UsersTable = props => {
   const { className, users, ...rest } = props;
-  
+  const user_id=props.token;
+  console.log("user_id:"+user_id);
   const classes = useStyles();
   
   return (
@@ -167,7 +170,7 @@ const UsersTable = props => {
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
-                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings)}
+                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
                           value="true"
                         />
                       </TableCell>
@@ -209,4 +212,4 @@ UsersTable.propTypes = {
   users: PropTypes.array.isRequired
 };
 
-export default UsersTable;
+export default withAuthSync(UsersTable);
