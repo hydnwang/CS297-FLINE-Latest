@@ -18,6 +18,18 @@ router.get('/get-friends/:uid', function (req, res) {
     }
 })
 
+router.get('/get-requests/:uid', function (req, res) {
+    try {
+        frdModel.getRequests(req.params.uid, (ret) => {
+            // console.log('data: ', ret)
+            res.send({'data': ret})
+        });
+    } catch (err) {
+        res.status = 400;
+        res.send({'msg': err.message})
+    }
+})
+
 router.get('/discover-friends-enrollment/:uid', function (req, res) {
     try {
         frdModel.discoverFriendsEnrollment(req.params.uid, (ret) => {
@@ -32,7 +44,7 @@ router.get('/discover-friends-enrollment/:uid', function (req, res) {
 
 router.get('/enrollment/:course', function (req, res) {
     try {
-        frdModel.enrollment(req.params.course, req.cookies.token, (ret) => {
+        frdModel.getEnrollment(req.params.course, req.cookies.token, (ret) => {
             // console.log('data: ', ret)
             res.send({'data': ret})
         });
