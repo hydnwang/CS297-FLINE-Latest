@@ -5,6 +5,7 @@ const FRONT_DIR = process.env.FRONT_DIR
 const bodyParser = require('body-parser')
 const express = require('express')
 const next = require('next')
+const cookieParser = require('cookie-parser')
 const dev = process.env.NODE_DEV !== 'production'
 const app = next({ dev, dir: FRONT_DIR })
 const handle = app.getRequestHandler()
@@ -12,6 +13,7 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   // express code here
   const server = express()
+  server.use(cookieParser())
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
   server.use('/api', require('./routes'))

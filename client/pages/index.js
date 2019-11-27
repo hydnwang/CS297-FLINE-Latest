@@ -9,7 +9,7 @@ const Main = props => {
     <Layout title="Main" loginStatus={props.loginStatus}>
       <Container maxWidth="md" style={{ flex: 1 }}>
         <h1>Discover something</h1>
-        <Newsfeed />
+        <Newsfeed uid={props.token} />
       </Container>
     </Layout>
   );

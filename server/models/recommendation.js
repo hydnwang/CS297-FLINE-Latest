@@ -15,8 +15,7 @@ var getUserScore = function (from, to, callback) {
             return;
         }
 
-        ret = 100 * jaccard.index(results[0].interests.split(','),
-                            results[1].interests.split(','));
+        ret = 100 * jaccard.index(JSON.parse(results[0].interests), JSON.parse(results[1].interests));
         callback(ret);
     });
 }

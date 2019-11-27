@@ -22,14 +22,13 @@ var getFriends = function (uid, callback) {
     });
 }
 
-var getEnrollment = function (course_id, callback) {
+var getEnrollment = function (course_id, uid, callback) {
     let queryStr = "SELECT id, name FROM registration INNER JOIN users ON \
-        users.id = registration.user_id WHERE course_id=" + course_id;
+        users.id = registration.user_id WHERE course_id=" + course_id + " AND user_id!=" + uid;
 
     sql.query(queryStr, function (error, results, fields) {
         if (error) throw error;
         
-        var uid = 1;
         getFriends(uid, (data) => {
             var frd_dict = {}
             for (var i = 0; i < data.frd_list.length; i++) {
@@ -103,8 +102,24 @@ var discoverFriendsEnrollment = function (uid, callback) {
     });
 }
 
+var requestFriend = function (from, to) {
+    let queryStr = "INSERT INTO friendship (from_id, to_id, status) values (" + from + ", " + to + ", 'pending')";
+    sql.query(queryStr, function (error, results, fields) {
+        if (error) throw error;
+    });
+}
+
+var acceptFriend = function (from, to) {
+    let queryStr = "UPDATE friendship SET status='friend' WHERE from_id=" + from + " AND to_id=" + to;
+    sql.query(queryStr, function (error, results, fields) {
+        if (error) throw error;
+    });
+}
+
 module.exports = {
     getFriends: getFriends,
     discoverFriendsEnrollment: discoverFriendsEnrollment,
-    enrollment: getEnrollment
+    enrollment: getEnrollment,
+    requestFriend: requestFriend,
+    acceptFriend: acceptFriend
 }
