@@ -45,11 +45,11 @@ class ItemList extends Component {
       <FormControl 
       fullWidth
       >
-        <CourseTable users={ parseData(str)} />
+        <CourseTable token = {this.props.token} users={ parseData(str)} />
         {/* {str} */}
       </FormControl>
     );
   }
 }
 
-export default withAuthSync(ItemList);
+export default ItemList;

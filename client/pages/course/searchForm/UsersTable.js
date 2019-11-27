@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
+import Router from "next/router";
+import {Link} from 'react-router-dom';
+import Details from '../details';
 import {
   Card,
   CardActions,
@@ -83,8 +86,7 @@ const parseTime=(str)=>{
   return res;
 };
 const handleSelectOne = (event, course_id,course_title,course_type, meeting_time,user_id) => {
-  
-  if(user_id==undefined) user_id=4;
+  if(user_id==undefined) user_id=0;
   var times="";
   meeting_time.forEach(item=>{
     if(item.length ==2){
@@ -125,6 +127,13 @@ const handleSelectOne = (event, course_id,course_title,course_type, meeting_time
   }
 
 };
+const handleJump =function (course_id,course_title){
+  Router.push({
+    pathname:'/course/details',
+    query:{course_id: course_id,
+      course_title : course_title}
+  })
+};
 
 const UsersTable = props => {
   const { className, users, ...rest } = props;
@@ -147,6 +156,7 @@ const UsersTable = props => {
                 <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox">
+                      ADD
                     </TableCell>
                     <TableCell>ClassCode</TableCell>
                     <TableCell>ClassType</TableCell>
@@ -180,7 +190,12 @@ const UsersTable = props => {
                         </div>
                       </TableCell>
                       <TableCell>{section.classType}</TableCell>
-                      <TableCell>{section.sectionCode}</TableCell>
+                      {/* <TableCell onClick = {handleJump(section.classCode,user.name)}> */}
+                      <TableCell>
+                        {/* <Link to="course/details/"> */}
+                      {section.sectionCode}
+                      {/* </Link> */}
+                      </TableCell>
                       <TableCell>{section.units}</TableCell>
                       <TableCell>{section.instructors[0]
                       }</TableCell>
@@ -212,4 +227,11 @@ UsersTable.propTypes = {
   users: PropTypes.array.isRequired
 };
 
-export default withAuthSync(UsersTable);
+// React.render((
+//   <Router>
+//     <Route path="/course/details/:name" component={Details}>
+//     </Route>
+//   </Router>
+// ), document.body)
+
+export default UsersTable;

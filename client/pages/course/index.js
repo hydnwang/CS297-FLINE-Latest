@@ -137,10 +137,10 @@ class SearchForm extends Component {
               </Grid>
           </div>
         </Container>
-        <ItemList data = {this.state.apiResponse}></ItemList>
+        <ItemList token = {this.props.token} data = {this.state.apiResponse}></ItemList>
       </Layout>
     );
   }
 }
 
-export default withStyles(useStyles)(SearchForm);
+export default withStyles(useStyles)(withAuthSync(SearchForm));

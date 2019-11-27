@@ -1,16 +1,11 @@
 import React from 'react'
 import Layout from '../../components/default_layout';
 import { Container, Paper, Typography } from '@material-ui/core/';
-import BuildIcon from '@material-ui/icons/Build';
 import { Scheduler, WeekView,Appointments } from '@devexpress/dx-react-scheduler-material-ui';
 import { ViewState } from '@devexpress/dx-react-scheduler';
-import {
-  AllDayPanel,
-} from '@devexpress/dx-react-scheduler-material-ui';
 import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
 const fetch = require("node-fetch");
-import appointments from './appointments'
 
 const Appointment = ({
   children, style, ...restProps
@@ -93,6 +88,7 @@ class Schedule extends React.PureComponent {
     };
   }
   componentWillMount() {
+    console.log("props:"+this.props);
     var u_id = 0;
     if(this.props.token!=undefined){
       u_id =this.props.token;

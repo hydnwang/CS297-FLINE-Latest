@@ -1,15 +1,12 @@
 import React from 'react'
-import Layout from '../../components/default_layout';
-import { Container, Paper, Typography } from '@material-ui/core/';
-import BuildIcon from '@material-ui/icons/Build';
-import { Scheduler, WeekView,Appointments } from '@devexpress/dx-react-scheduler-material-ui';
 import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
 const fetch = require("node-fetch");
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
-
-import { AccountProfile, AccountDetails } from './components';
+import Enrollment from '../../components/Enrollment'
+import CourseDetails from './searchForm/course_details';
+import {withRouter} from 'next/router'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,13 +20,14 @@ class Details extends React.PureComponent {
     
         this.state = {
           user_id: this.props.token,
-          currentDate: new Date('2019-11-27'),
+          course_id: this.props.router.query.course_id,
+          course_title: this.props.router.query.course_title,
         };
       }
 
     render(){
         return (
-            <div className={classes.root}>
+            <div >
               <Grid
                 container
                 spacing={4}
@@ -41,7 +39,7 @@ class Details extends React.PureComponent {
                   xl={4}
                   xs={12}
                 >
-                  <AccountProfile />
+                  <CourseDetails />
                 </Grid>
                 <Grid
                   item
@@ -50,7 +48,7 @@ class Details extends React.PureComponent {
                   xl={8}
                   xs={12}
                 >
-                  <Enrollment courseId={courseId} uid={this.state.user_id}/>
+                  <Enrollment courseId={this.state.course_id} uid={this.state.user_id}/>
                 </Grid>
               </Grid>
             </div>
@@ -59,4 +57,4 @@ class Details extends React.PureComponent {
   
 };
 
-export default withAuthSync(Details);
+export default withRouter(withAuthSync(Details));
