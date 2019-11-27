@@ -38,6 +38,9 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(2, 0, 1),
   },
+  inputFile: {
+    // display: 'none', 
+  }
 }));
 
 // Components
@@ -52,6 +55,14 @@ function FormComponent(props) {
     let interestsArr = JSON.parse(props.data.interests)
     defaultInterestList = interestsArr.map(value => ({value}))
   }
+  // const [file, setFile] = React.useState(null)
+  // const handleImgChange = event => {
+  //   event.preventDefault();
+  //   console.log('image changed: ')
+  //   let f = URL.createObjectURL(event.target.files[0])
+  //   console.log(f)
+  //   setFile(f)
+  // }
   const [values, setValues] = React.useState({
     realname: (props.data.name) ? props.data.name:'', 
     username: props.data.email, 
@@ -118,9 +129,9 @@ function FormComponent(props) {
   return (
     <form className={classes.form} noValidate autoComplete="off" onSubmit={handleSubmit}>
       <Grid container justify="center" alignItems="center">
-      <Avatar className={classes.avatarContainer}>
-        <AccountCircleIcon className={classes.avatar} />
-      </Avatar>
+        <Avatar className={classes.avatarContainer}>
+          <AccountCircleIcon className={classes.avatar} />
+        </Avatar>
       </Grid>
       <TextField
         id="name"
@@ -240,9 +251,13 @@ const Profile = ({ data, token, loginStatus }) => {
 Profile.getInitialProps = async ctx => {
   let data = {}
   const { token } = nextCookies(ctx)
+  const protocol = 'http'
   const fetchURL = `/api/users/${token}`;
+  const apiUrl = process.browser
+    ? `${protocol}://${window.location.host}${fetchURL}`
+    : `${protocol}://${ctx.req.headers.host}${fetchURL}`;
   try {
-    const res = await fetch(fetchURL)
+    const res = await fetch(apiUrl)
     if (res.status == 200) {
       data = await res.json()
     } else {

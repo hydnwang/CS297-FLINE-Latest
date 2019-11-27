@@ -3,6 +3,11 @@ import Router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 
+export const loginDir = props => {
+    const { token, path } = props
+    cookie.set('token', token, { expires: 1 })
+    Router.push(path)
+}
 
 export const login = ({ token }) => {
     cookie.set('token', token, { expires: 1 })

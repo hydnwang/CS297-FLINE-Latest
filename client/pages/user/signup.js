@@ -1,7 +1,7 @@
 // Libraries
 import React from 'react';
 import fetch from 'isomorphic-unfetch';
-import { login, withAuthSync } from '../../utils/auth';
+import { loginDir, withAuthSync } from '../../utils/auth';
 
 // Styles
 import Layout from '../../components/default_layout';
@@ -64,6 +64,10 @@ function FormComponent() {
   const handleSubmit = async event => {
     event.preventDefault()
     const URL = '/api/users/create';
+    const protocol = 'http'
+    const apiUrl = process.browser
+      ? `${protocol}://${window.location.host}${URL}`
+      : `${protocol}://${ctx.req.headers.host}${URL}`;
     const payload = {
       realname: values.realname,
       username: values.username,
@@ -72,7 +76,7 @@ function FormComponent() {
       interests: values.interests
     }
     try {
-      const res = await fetch(URL, {
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +87,7 @@ function FormComponent() {
       if (res.status == 200) {
         const data = await res.json()
         const { userId } = data
-        await login({ token: userId })
+        await loginDir({ token: userId, path: '/' })
       } else {
         let err = new Error(res.statusText)
         err.response = res
