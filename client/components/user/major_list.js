@@ -30,7 +30,7 @@ const majorList = [
   { value: 'Cognitive Neuroscience' }, 
   { value: 'Cognitive Sciences' }, 
   { value: 'Comparative Literature' }, 
-  { value: 'Computational Science2' }, 
+  { value: 'Computational Science' }, 
   { value: 'Computer Engineering' }, 
   { value: 'Computer Game Science' }, 
   { value: 'Computer Science' }, 

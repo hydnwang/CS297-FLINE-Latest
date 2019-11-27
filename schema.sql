@@ -8,14 +8,21 @@ CREATE TABLE IF NOT EXISTS registration (
     PRIMARY KEY (course_id, user_id)
 );
 
-CREATE TABLE IF NOT EXISTS users (
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
-  name varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  email varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  password varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  major varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  interests text COLLATE utf8mb4_general_ci,
-  privacy int(10) unsigned NOT NULL,
-  role int(10) unsigned NOT NULL,
-  PRIMARY KEY (id)
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT '',
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `major` varchar(100) COLLATE utf8mb4_general_ci DEFAULT '',
+  `interests` text COLLATE utf8mb4_general_ci,
+  `privacy` int(10) unsigned DEFAULT '0',
+  `role` int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS friendship (
+    from_id INT REFERENCES users(id),
+    to_id INT REFERENCES users(id),
+    status ENUM('pending', 'friend') NOT NULL,
+    PRIMARY KEY (from_id, to_id)
 );
