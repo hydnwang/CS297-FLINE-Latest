@@ -65,7 +65,7 @@ const Friends = props => {
   }
 
   return (
-    <Layout title="Friends">
+    <Layout title="Friends" loginStatus={props.loginStatus}>
       <Container maxWidth="md" style={{ flex: 1 }}>
         <h1>Friends</h1>
         <Grid container spacing={3}>

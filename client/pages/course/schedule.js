@@ -138,7 +138,7 @@ class Schedule extends React.PureComponent {
   {
     const { data, currentDate } = this.state;
     return (
-      <Layout title="Schedule">
+      <Layout title="Schedule" loginStatus={this.props.loginStatus}>
         <Container maxWidth="12" style={{ flex: 1 }}>
           <h1>Schedule</h1>
           <Scheduler

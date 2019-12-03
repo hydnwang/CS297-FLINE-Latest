@@ -95,7 +95,7 @@ class SearchForm extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Layout title='Course'>
+      <Layout title='Course' loginStatus={this.props.loginStatus}>
         <Container maxWidth="sm" style={{ flex: 1 }}>
         <h1>Course Search</h1>
           <div >
