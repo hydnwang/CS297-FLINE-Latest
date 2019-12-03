@@ -1,19 +1,17 @@
 import React ,{Component} from 'react';
 import Layout from '../../components/default_layout';
 import { Container } from '@material-ui/core/';
-import DeptSearchBar from './searchForm/DeptSearchBar';
-import GESelector from './searchForm/GESelector';
-import CourseCodeSearchBar from './searchForm/CourseCodeSearchBar';
-import TermSelector from './searchForm/TermSelector';
+import GESelector from '../../components/course/searchForm/GESelector';
+import CourseCodeSearchBar from '../../components/course/searchForm/CourseCodeSearchBar';
+import TermSelector from '../../components/course/searchForm/TermSelector';
 import Grid from '@material-ui/core/Grid';
 import { Button} from '@material-ui/core';
 import querystring from 'querystring';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 const fetch = require("node-fetch");
-import MenuItem from '@material-ui/core/MenuItem';
-import DeptBar from './searchForm/DeptBar';
-import ItemList from './searchForm/ItemList';
+import DeptBar from '../../components/course/searchForm/DeptBar';
+import ItemList from '../../components/course/searchForm/ItemList';
 import { withAuthSync } from '../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
@@ -137,7 +135,7 @@ class SearchForm extends Component {
               </Grid>
           </div>
         </Container>
-        <ItemList token = {this.props.token} data = {this.state.apiResponse}></ItemList>
+        <ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term}></ItemList>
       </Layout>
     );
   }

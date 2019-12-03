@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Router from "next/router";
-import {Link} from 'react-router-dom';
-import Details from '../details';
 import {
   Card,
-  CardActions,
   CardContent,
-  Avatar,
   Checkbox,
   Table,
   TableBody,
@@ -19,9 +14,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-  TablePagination
 } from '@material-ui/core';
-import { withAuthSync } from '../../../utils/auth';
+const fetch = require("node-fetch");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,9 +38,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
+
+const checkReg=(courses, c_id)=>{
+  // console.log(c_id+"in courses is"+courses.has(c_id));
+  if(courses.size>0){
+    return courses.has(parseInt(c_id))
+  }
+  else return false;
+};
+
 const parseTime=(str)=>{
   var res ="";
-  console.log("str:"+str);
+  // console.log("str:"+str);
   var array=[];
   var i=0;
   if(str.length>3){
@@ -85,7 +89,9 @@ const parseTime=(str)=>{
   console.log("parseTime:"+res);
   return res;
 };
-const handleSelectOne = (event, course_id,course_title,course_type, meeting_time,user_id) => {
+
+const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id) => {
+  
   if(user_id==undefined) user_id=0;
   var times="";
   meeting_time.forEach(item=>{
@@ -127,23 +133,32 @@ const handleSelectOne = (event, course_id,course_title,course_type, meeting_time
   }
 
 };
-const handleJump =function (course_id,course_title){
+const handleJump =function (event, course_id,course_title,term){
+  var title ="";
+  course_title.forEach(item=>{
+    title=title.concat(item+",");
+  })
+  console.log("jump："+title);
   Router.push({
     pathname:'/course/details',
     query:{course_id: course_id,
-      course_title : course_title}
+            course_title: course_title,
+            term:term,}
   })
 };
 
-const UsersTable = props => {
+const coursesTable = props => {
   const { className, users, ...rest } = props;
   const user_id=props.token;
-  console.log("user_id:"+user_id);
+  const term = props.term;
+  // console.log("user_id:"+user_id);
+  const courses=props.courses;
+  // console.log("21490"+ courses);
   const classes = useStyles();
   
   return (
     <div>
-      {users.map((user)=>(
+      {users&&users.map((user)=>(
         <Card
           {...rest}
           className={clsx(classes.root, className)}
@@ -171,7 +186,7 @@ const UsersTable = props => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {user.sections.map((section) => (
+                  {user&&user.sections.map((section) => (
                     <TableRow
                       className={classes.tableRow}
                       hover
@@ -180,21 +195,21 @@ const UsersTable = props => {
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
+                          checked={checkReg(courses,section.classCode)}
                           onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
                           value="true"
                         />
                       </TableCell>
                       <TableCell>
                         <div className={classes.nameContainer}>
+                          <a onClick = {event =>handleJump(event,section.classCode,user.name, term)} >
                           <Typography variant="body1">{section.classCode}</Typography>
+                          </a>
                         </div>
                       </TableCell>
                       <TableCell>{section.classType}</TableCell>
-                      {/* <TableCell onClick = {handleJump(section.classCode,user.name)}> */}
-                      <TableCell>
-                        {/* <Link to="course/details/"> */}
-                      {section.sectionCode}
-                      {/* </Link> */}
+                      <TableCell >
+                        {section.sectionCode}
                       </TableCell>
                       <TableCell>{section.units}</TableCell>
                       <TableCell>{section.instructors[0]
@@ -222,7 +237,7 @@ const UsersTable = props => {
   );
 };
 
-UsersTable.propTypes = {
+coursesTable.propTypes = {
   className: PropTypes.string,
   users: PropTypes.array.isRequired
 };
@@ -234,4 +249,4 @@ UsersTable.propTypes = {
 //   </Router>
 // ), document.body)
 
-export default UsersTable;
+export default coursesTable;

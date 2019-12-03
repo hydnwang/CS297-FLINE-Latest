@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../../components/default_layout';
-import { Container, Paper, Typography } from '@material-ui/core/';
+import { Container, Typography } from '@material-ui/core/';
 import { Scheduler, WeekView,Appointments } from '@devexpress/dx-react-scheduler-material-ui';
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import querystring from 'querystring';
@@ -22,7 +22,22 @@ const Appointment = ({
   </Appointments.Appointment>
 );
 
+const getWeekDay = function(){
+  const dateOfToday = Date.now();
+  var currentDate = new Date(dateOfToday);
+  var timesStamp = currentDate.getTime();
+  var currenDay = currentDate.getDay();
+  console.log("今天是："+currenDay);
+  var dates = [];
+  for (var i = 0; i < 7; i++) {
+      dates.push(new Date(timesStamp + 24 * 60 * 60 * 1000 * (i - (currenDay + 6) % 7)));
+  }
+  // console.log("dates:"+dates);
+  return dates;
+};
+
 const parseTime=function(data){
+  var dates=getWeekDay();
   var res=[];
   data.forEach(item=>{
   var slot=item.meeting_time;
@@ -46,15 +61,25 @@ const parseTime=function(data){
       var end_hour=0;
       var end_min = 0;
       if(group[0]=="M"){
-        day = 25;
+        day = dates[0].getDate();
+        month = dates[0].getMonth();
+        year = dates[0].getYear();
       }else if(group[0]=="Tu"){
-        day = 26;
+        day = dates[1].getDate();
+        month = dates[1].getMonth();
+        year = dates[1].getYear();
       }else if(group[0]=="W"){
-        day = 27;
+        day = dates[2].getDate();
+        month = dates[2].getMonth();
+        year = dates[2].getYear();
       }else if(group[0]=="Th"){
-        day = 28;
+        day = dates[3].getDate();
+        month = dates[3].getMonth();
+        year = dates[3].getYear();
       }else if(group[0]=="F"){
-        day = 29;
+        day = dates[4].getDate();
+        month = dates[4].getMonth();
+        year = dates[4].getYear();
       }
       var hour_slot = group[1].split(/[-:]/);
       if(group[1].charAt(group[1].length-1)=="p"){
@@ -68,8 +93,10 @@ const parseTime=function(data){
         end_hour = parseInt(hour_slot[2]);
         end_min = parseInt(hour_slot[3]);
       }
-      json.startDate=new Date(year, month, day, start_hour, start_min);
-      json.endDate=new Date(year, month, day, end_hour, end_min);
+      json.startDate=new Date(year+1900, month, day, start_hour, start_min);
+      // console.log("course time:"+ json.startDate.toLocaleDateString());
+      // console.log("year:"+dates[0].getYear());
+      json.endDate=new Date(year+1900, month, day, end_hour, end_min);
       res.push(json);
     }
   })
@@ -101,7 +128,7 @@ class Schedule extends React.PureComponent {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        this.setState({data:parseTime(data)}) ;
+       this.setState({data:parseTime(data)}) ;
       })
       .catch(e => console.log('错误:', e));
     console.log("course_data:"+this.state.data);
@@ -118,7 +145,6 @@ class Schedule extends React.PureComponent {
           data = {data}
           >
             <ViewState
-              currentDate={currentDate}
             />
             <WeekView
               startDayHour={8}

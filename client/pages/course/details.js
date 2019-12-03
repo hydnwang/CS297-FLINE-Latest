@@ -5,8 +5,9 @@ const fetch = require("node-fetch");
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 import Enrollment from '../../components/Enrollment'
-import CourseDetails from './searchForm/course_details';
-import {withRouter} from 'next/router'
+import CourseDetails from '../../components/course/searchForm/course_details';
+import Layout from '../../components/default_layout';
+import { withRouter } from 'next/router'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,11 +23,13 @@ class Details extends React.PureComponent {
           user_id: this.props.token,
           course_id: this.props.router.query.course_id,
           course_title: this.props.router.query.course_title,
+          term:this.props.router.query.term,
         };
       }
 
     render(){
         return (
+          <Layout>
             <div >
               <Grid
                 container
@@ -34,16 +37,16 @@ class Details extends React.PureComponent {
               >
                 <Grid
                   item
-                  lg={4}
+                  lg={8}
                   md={6}
                   xl={4}
                   xs={12}
                 >
-                  <CourseDetails />
+                  <CourseDetails course_id = {this.state.course_id} course_title = {this.state.course_title} user_id = {this.state.user_id} term = {this.state.term}/>
                 </Grid>
                 <Grid
                   item
-                  lg={8}
+                  lg={4}
                   md={6}
                   xl={8}
                   xs={12}
@@ -52,9 +55,10 @@ class Details extends React.PureComponent {
                 </Grid>
               </Grid>
             </div>
-          );
+          </Layout>
+        );
     }
   
 };
 
-export default withRouter(withAuthSync(Details));
+export default withAuthSync(withRouter(Details));

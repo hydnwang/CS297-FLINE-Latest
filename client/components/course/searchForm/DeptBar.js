@@ -3,7 +3,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Dept from '../../../components/course/depts';
+import Dept from '../depts';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import { withAuthSync } from '../../../utils/auth';
@@ -23,13 +23,6 @@ class DeptBar extends Component {
     return this.state.dept !== nextState.dept;
   }
 
-//   handleChange(event) {
-//     console.log("DepatBar handleChange name:"+[event.target.name]);
-//     console.log("DepatBar handleChange value:"+event.target.value);
-//     this.state={dept:event.target.value,};
-//     console.log("DepatBar handleChange state:"+this.state.dept);
-//     this.props.setDept(this.state.dept);
-//   }
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
     this.props.setDept(event.target.value);

@@ -1,13 +1,9 @@
 import React, { Component, useState } from 'react';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Dept from '../../../components/course/depts';
 import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
-import CourseTable from './UsersTable'
-import { withAuthSync } from '../../../utils/auth';
+import CourseTable from './coursesTable'
+const fetch = require("node-fetch");
+import querystring from 'querystring';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -21,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 function parseData(str){
     var objs=[];
-    if(str.length>0){
+    if(str && str.length>0){
       var temp = str.substring(1,str.length-1);
     // console.log("temp:"+temp);
     var courses=temp.split("}{");
@@ -38,15 +34,38 @@ function parseData(str){
 class ItemList extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      courses:{},
+    }
   }
+  
+  componentWillMount(){
+    const params={
+      user_id:this.props.token,
+    };
+    const url = 'http://localhost:3000/api/schedule?'+ querystring.stringify(params);
+    console.log(url);
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        var rObj = new Set();
+        console.log("in getcourse")
+        data.forEach(function(obj){
+          rObj.add(obj.course_id);
+        });
+        console.log("rObj.size"+rObj.size);
+        this.setState({courses:rObj});
+      })
+      .catch(e => console.log('错误:', e));
+  };
   render() {
     var str = this.props.data;
+    // console.log("itemList:"+ str);
     return (
       <FormControl 
       fullWidth
       >
-        <CourseTable token = {this.props.token} users={ parseData(str)} />
-        {/* {str} */}
+        <CourseTable token = {this.props.token} users={ parseData(str)} term = {this.props.term} courses={this.state.courses}/>
       </FormControl>
     );
   }
