@@ -79,7 +79,8 @@ function FormComponent(props) {
     if (prop === 'major') {
       v = (val) ? val.value: ''
     } else if (prop === 'interests') {
-      v = val.map(x => x.value)
+      // v = val.map(x => x.value)
+      v = val
     } else {
       v = event.target.value
     }
@@ -94,13 +95,14 @@ function FormComponent(props) {
   const handleSubmit = async event => {
     event.preventDefault()
     const URL = '/api/users/update';
+    const interestsParse = values.interests.map(x => x.value)
     const payload = {
       id: props.uid, 
       realname: values.realname, 
       username: values.username, 
       password: values.password, 
       major: values.major, 
-      interests: values.interests
+      interests: interestsParse, 
     }
     try {
       const res = await fetch(URL, {
