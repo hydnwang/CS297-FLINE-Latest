@@ -67,8 +67,8 @@ var getEnrollment = function (course_id, uid, callback) {
 }
 
 var getSortedEnrollment = function (uid, name, callback) {
-    let queryStr = "SELECT course_id, course_title, timestamp FROM registration \
-        WHERE user_id=" + uid + " ORDER BY timestamp DESC LIMIT 10";
+    let queryStr = "SELECT course_id, course_title, reg_time FROM registration \
+        WHERE user_id=" + uid + " ORDER BY reg_time DESC LIMIT 10";
     sql.query(queryStr, function (error, results, fields) {
         if (error) throw error;
         for (var i = 0; i < results.length; i++) {
@@ -81,7 +81,7 @@ var getSortedEnrollment = function (uid, name, callback) {
 var mergeFriendsEnrollments = function (enroll_lists) {
     var out = [];
     var heap = new Heap(function(a, b) {
-        return b.timestamp - a.timestamp;
+        return b.reg_time - a.reg_time;
     });
 
     for (var i = 0; i < enroll_lists.length; i++) {
