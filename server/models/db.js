@@ -4,7 +4,7 @@ var connection = mysql.createPool({
   connectionLimit: 10,
   host: 'localhost',
   user: 'root',
-  password: 'cpy0821',
+  password: 'password',
   database: 'fline'
 });
 

@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
   left_pane: {
     width: '60%',
     borderRight: `5px solid ${theme.palette.divider}`,
-    // backgroundColor: theme.palette.background.paper
+    backgroundColor: '#504658'
   },
   right_pane: {
     width: '40%',
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: '#f0decb'
   },
   inline: {
     display: 'inline',
@@ -91,11 +91,11 @@ export default function Newsfeed(props) {
           items.map((item, index) =>
             <MenuItem
               button
-              key={item.timestamp} 
+              key={item.reg_time} 
               alignItems="flex-start" 
               divider={true}
-              selected={item.timestamp === selectedIndex}
-              onClick={e => handleClick(e, item.timestamp, item.course_id)}
+              selected={item.reg_time === selectedIndex}
+              onClick={e => handleClick(e, item.reg_time, item.course_id)}
             >
               <ListItemText
                 primary={

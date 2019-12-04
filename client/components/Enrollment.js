@@ -69,7 +69,7 @@ export default function Enrollment(props) {
 
 
   return (
-    <TabPanel>
+    <TabPanel style={{backgroundColor: '#f0decb'}}>
       <h2>Student List</h2>
       <List>
         {

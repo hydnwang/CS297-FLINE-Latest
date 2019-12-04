@@ -131,7 +131,6 @@ const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,
       })
     })
   }
-
 };
 const handleJump =function (event, course_id,course_title,term){
   var title ="";
