@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   root: {
   },
   content: {
-    padding: 100
+    // padding: 100
   },
   inner: {
     minWidth: 1050
