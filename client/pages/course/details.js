@@ -26,6 +26,7 @@ class Details extends React.PureComponent {
           course_title: this.props.router.query.course_title,
           term:this.props.router.query.term,
         };
+        console.log(this.state.course_title);
       }
 
     render(){
@@ -34,28 +35,16 @@ class Details extends React.PureComponent {
             <div style={{backgroundImage: `url(${background})`}}>
               <Grid
                 container
-                spacing={4}
               >
                 <Grid
                   item
-                  // lg={8}
-                  // md={6}
-                  // xl={4}
-                  // xs={12}
+                  xs={8}
                 >
                   <CourseDetails course_id = {this.state.course_id} course_title = {this.state.course_title} user_id = {this.state.user_id} term = {this.state.term}/>
                 </Grid>
-              </Grid>
-              <Grid
-                container
-                spacing={4}
-              >
                 <Grid
                   item
-                  // lg={4}
-                  // md={6}
-                  // xl={8}
-                  // xs={12}
+                  xs={4}
                 >
                   <Enrollment courseId={this.state.course_id} uid={this.state.user_id}/>
                 </Grid>

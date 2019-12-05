@@ -90,7 +90,7 @@ const parseTime=(str)=>{
   return res;
 };
 
-const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id) => {
+const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id, term) => {
   
   if(user_id==undefined) user_id=0;
   var times="";
@@ -116,6 +116,7 @@ const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,
         thirdParam: title,
         forthParam: course_type,
         fifthParam: times,
+        term: term
       })
     })
   }else{
@@ -195,7 +196,7 @@ const coursesTable = props => {
                         <Checkbox
                           color="primary"
                           checked={checkReg(courses,section.classCode)}
-                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
+                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id, term)}
                           value="true"
                         />
                       </TableCell>

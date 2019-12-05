@@ -5,7 +5,7 @@ var async = require('async')
 var Heap = require('heap');
 
 var getFriends = function (uid, callback) {
-    let queryStr = "SELECT id, name, status FROM friendship INNER JOIN users ON \
+    let queryStr = "SELECT id, name, status, thumbnail FROM friendship INNER JOIN users ON \
         users.id = friendship.to_id WHERE from_id=" + uid;
 
     sql.query(queryStr, function (error, results, fields) {
@@ -23,7 +23,7 @@ var getFriends = function (uid, callback) {
 }
 
 var getRequests = function (uid, callback) {
-    let queryStr = "SELECT id, name, status FROM friendship INNER JOIN users ON \
+    let queryStr = "SELECT id, name, status, thumbnail FROM friendship INNER JOIN users ON \
         users.id = friendship.from_id WHERE status='pending' AND to_id=" + uid;
 
     sql.query(queryStr, function (error, results, fields) {
@@ -33,7 +33,7 @@ var getRequests = function (uid, callback) {
 }
 
 var getEnrollment = function (course_id, uid, callback) {
-    let queryStr = "SELECT id, name FROM registration INNER JOIN users ON \
+    let queryStr = "SELECT id, name, thumbnail FROM registration INNER JOIN users ON \
         users.id = registration.user_id WHERE course_id=" + course_id + " AND user_id!=" + uid;
 
     sql.query(queryStr, function (error, results, fields) {
@@ -67,7 +67,7 @@ var getEnrollment = function (course_id, uid, callback) {
 }
 
 var getSortedEnrollment = function (uid, name, callback) {
-    let queryStr = "SELECT course_id, course_title, reg_time FROM registration \
+    let queryStr = "SELECT course_id, course_title, reg_time, term FROM registration \
         WHERE user_id=" + uid + " ORDER BY reg_time DESC LIMIT 10";
     sql.query(queryStr, function (error, results, fields) {
         if (error) throw error;
