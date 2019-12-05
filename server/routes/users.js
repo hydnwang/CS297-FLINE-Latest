@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const userModel = require('../models/users')
+const path = require('path')
+var fs = require("fs");
 
 router.get('/all', function (req, res) {
   userModel.getUsersByIds((data) => {
@@ -56,18 +58,39 @@ router.post('/create', function (req, res) {
 })
 
 router.post('/update', function (req, res) {
-  const { id, realname, username, password, major, interests } = req.body
+  const { id, realname, username, password, major, interests, userPhoto } = req.body
   let payload = {
     name: realname, 
     email: username, 
     major: major, 
-    interests: JSON.stringify(interests)
+    interests: JSON.stringify(interests), 
+    thumbnail: userPhoto, 
   }
   if (password && password !== '') {
     payload['password'] = password
   }
   userModel.updateUserById(id, payload, (result) => {
     res.send({ message: result })
+  })
+})
+
+router.post('/upload', function (req, res) {
+  if (req.files == null) {
+    return res.status(400).json({message: 'no file was uploaded'})
+  }
+  const file = req.files.file
+  let fileFolder = path.join(__dirname, '../../client/public/uploads')
+  let fullFilePath = path.join(fileFolder, file.name)
+  if (!fs.existsSync(fileFolder)) {
+    fs.mkdirSync(fileFolder);
+  }
+  // file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, err => {
+  file.mv(fullFilePath, err => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    }
+    res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
   })
 })
 
