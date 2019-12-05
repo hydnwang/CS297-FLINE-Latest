@@ -15,7 +15,6 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import CourseSearch from '../../../pages/course/index';
 const fetch = require("node-fetch");
 
 const useStyles = makeStyles(theme => ({
@@ -40,7 +39,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const checkReg=(courses, c_id)=>{
-  console.log(c_id+"in courses is"+courses.has(c_id));
   if(courses.size>0){
     return courses.has(c_id)
   }
