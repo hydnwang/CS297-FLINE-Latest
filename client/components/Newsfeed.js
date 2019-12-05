@@ -5,10 +5,9 @@ import {
   MenuItem
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import SendIcon from '@material-ui/icons/Send';
 import PropTypes from 'prop-types';
 import Enrollment from './Enrollment';
+import Router from 'next/router'
 const fetch = require("node-fetch");
 
 const discover_api = '/api/friendship/discover-friends-enrollment/';
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   right_pane: {
     width: '40%',
-    backgroundColor: '#f0decb'
+    // backgroundColor: '#f0decb'
   },
   inline: {
     display: 'inline',
@@ -66,7 +65,18 @@ export default function Newsfeed(props) {
   const handleClick = (event, idx, course_id) => {
     setSelectedIndex(idx);
     setCourse(course_id);
-    // console.log("setCourse course_id="+ course_id);
+  };
+
+  const handleClickMore = (course_id, course_title, term) => {
+    console.log("handleClickMore");
+    Router.push({
+      pathname: '/course/details',
+      query: {
+        course_id: course_id,
+        course_title: course_title,
+        term: term
+      }
+    });
   };
 
   React.useEffect(() => {
@@ -104,14 +114,15 @@ export default function Newsfeed(props) {
                       component="span"
                       color="textPrimary"
                     >
-                      {item.course_title.toUpperCase()}
+                      {item.course_title.replace(/,/g, ' ').toUpperCase()}
                     </Typography>
                   </React.Fragment>
                 }
                 secondary={`Enrolled by ${item.name}`}
               />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="more">
+                <IconButton edge="end" aria-label="more"
+                  onClick={e => handleClickMore(item.course_id, item.course_title.split(','), item.term)}>
                   <MoreHorizIcon />
                 </IconButton>
               </ListItemSecondaryAction>

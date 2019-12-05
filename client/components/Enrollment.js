@@ -5,6 +5,7 @@ import {
   MenuItem
 } from '@material-ui/core';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SendIcon from '@material-ui/icons/Send';
 import PropTypes from 'prop-types';
 const fetch = require("node-fetch");
@@ -12,15 +13,15 @@ const fetch = require("node-fetch");
 const sendRequest_api = '/api/friendship/request-friend';
 const enrollment_api = '/api/friendship/enrollment/';
 
-function TabPanel(props) {
-  const { children, index, ...other } = props;
 
+function TabPanel(props) {
+  const { children, className, ...other } = props;
+  
   return (
     <Typography
       component="div"
       role="tabpanel"
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      className={className}
       {...other}
     >
       <Box p={3}>{children}</Box>
@@ -35,6 +36,9 @@ TabPanel.propTypes = {
 
 export default function Enrollment(props) {
   const [students, setStudents] = React.useState([]);
+  const thumbs = <Avatar>
+    <AccountCircleIcon style={{width: 'inherit', height: 'inherit'}}/>
+  </Avatar>;
 
   React.useEffect(() => {
     // console.log("useEffect");
@@ -69,14 +73,14 @@ export default function Enrollment(props) {
 
 
   return (
-    <TabPanel style={{backgroundColor: '#f0decb'}}>
-      <h2>Student List</h2>
+    <TabPanel className={props.className}>
+      <h2>{ students.length > 0? ('Student List'): ('') }</h2>
       <List>
         {
           students.map((student) =>
             <ListItem key={student.name}>
               <ListItemAvatar>
-                <Avatar src="../../public/images/avatar.jpg" />
+                { student.thumbnail? (<Avatar src={student.thumbnail} />): thumbs }
               </ListItemAvatar>
               <ListItemText
                 primary={student.name}
@@ -88,7 +92,7 @@ export default function Enrollment(props) {
                     <PersonAddIcon />
                   </IconButton>
                 ): (student.status == 'pending'? (
-                  <IconButton edge="end" disabled="true" aria-label="more">
+                  <IconButton edge="end" disabled aria-label="more">
                     <SendIcon />
                   </IconButton>
                 ):(<p/>))

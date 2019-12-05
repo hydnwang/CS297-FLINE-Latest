@@ -108,39 +108,48 @@ return res;
 class Schedule extends React.PureComponent {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       data: [],
       currentDate: new Date('2019-11-27'),
+      userName: ''
     };
   }
+
+  static getInitialProps({query}) {
+    return {query}
+  }
+
   componentWillMount() {
-    console.log("props:"+this.props);
-    var u_id = 0;
-    if(this.props.token!=undefined){
-      u_id =this.props.token;
+    var u_id = this.props.query.u_id || this.props.token;
+    if (u_id != undefined) {
+      fetch('/api/users/' + u_id)
+        .then(res => res.json())
+        .then(data => {
+          this.setState({userName: data[0].name}) ;
+        })
     }
     const params={
       user_id:u_id
     };
-    const url = 'http://localhost:3000/api/schedule?'+ querystring.stringify(params);
-    console.log(url);
+    const url = '/api/schedule?'+ querystring.stringify(params);
+
     fetch(url)
       .then(res => res.json())
       .then(data => {
        this.setState({data:parseTime(data)}) ;
       })
       .catch(e => console.log('错误:', e));
-    console.log("course_data:"+this.state.data);
+
   };
 
   render()
   {
-    const { data, currentDate } = this.state;
+    const { data, currentDate, userName } = this.state;
     return (
       <Layout title="Schedule" loginStatus={this.props.loginStatus}>
         <Container maxWidth="12" style={{ flex: 1 }}>
-          <h1>Schedule</h1>
+          <h1>{userName? (userName + "'s Schedule"): ("Schedule")}</h1>
           <Scheduler
           data = {data}
           >

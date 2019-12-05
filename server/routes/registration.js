@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
 
 router.post('/add', function(req, res) {
 	console.log(req.body);
-	Reg.addCourse(req.body.firstParam,req.body.secondParam,req.body.thirdParam,req.body.forthParam,req.body.fifthParam);
+	Reg.addCourse(req.body.firstParam,req.body.secondParam,req.body.thirdParam,req.body.forthParam,req.body.fifthParam, req.body.term);
 	res.send("ok");
 })
 
