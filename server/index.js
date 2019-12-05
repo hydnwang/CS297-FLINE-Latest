@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const dev = process.env.NODE_DEV !== 'production'
 const app = next({ dev, dir: FRONT_DIR })
 const handle = app.getRequestHandler()
+const fileUpload = require('express-fileupload')
 
 app.prepare().then(() => {
   // express code here
@@ -16,6 +17,7 @@ app.prepare().then(() => {
   server.use(cookieParser())
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
+  server.use(fileUpload())
   server.use('/api', require('./routes'))
 
   server.get('*', handle)

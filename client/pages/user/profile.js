@@ -3,6 +3,8 @@ import React from 'react';
 import nextCookies from 'next-cookies';
 import fetch from 'isomorphic-unfetch';
 import { withAuthSync } from '../../utils/auth';
+import { useDropzone } from 'react-dropzone';
+import axios from 'axios'
 
 // Styles
 import Layout from '../../components/default_layout';
@@ -73,6 +75,7 @@ function FormComponent(props) {
     usernameErr: '', 
     passwordErr: '', 
     showPassword: false, 
+    userPhoto: (props.data.thumbnail) ? props.data.thumbnail:'', 
   });
   const handleChange = prop => (event, val) => {
     let v
@@ -94,6 +97,21 @@ function FormComponent(props) {
   };
   const handleSubmit = async event => {
     event.preventDefault()
+
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await axios.post('/api/users/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      console.log(res.data)
+      const { fileName, filePath } = res.data
+      // setUploadFile({ fileName, filePath })
+      values.userPhoto = filePath
+    } catch (error) {
+      console.log(error.response)
+    }
+
     const URL = '/api/users/update';
     const interestsParse = values.interests.map(x => x.value)
     const payload = {
@@ -103,6 +121,7 @@ function FormComponent(props) {
       password: values.password, 
       major: values.major, 
       interests: interestsParse, 
+      userPhoto: values.userPhoto, 
     }
     try {
       const res = await fetch(URL, {
@@ -128,12 +147,45 @@ function FormComponent(props) {
       }))
     }
   };
+
+  const [file, setFile] = React.useState('');
+  const [dropFile, setDropFile] = React.useState([])
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: 'image/*',
+    onDrop: acceptedFiles => {
+      setDropFile(acceptedFiles.map(file => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+      setFile(acceptedFiles[0])
+    }
+  });
+  React.useEffect(() => () => {
+    // Make sure to revoke the data uris to avoid memory leaks
+    dropFile.forEach(file => URL.revokeObjectURL(file.preview));
+  }, [dropFile]);
+  let thumbs = <Avatar className={classes.avatarContainer}>
+    <AccountCircleIcon className={classes.avatar} />
+  </Avatar>
+
+  if (Array.isArray(dropFile) && dropFile.length) {
+    thumbs = <Avatar className={classes.avatarContainer} src={dropFile[0].preview} />
+  } else if (values.userPhoto != null && values.userPhoto != '') {
+    thumbs = <Avatar className={classes.avatarContainer} src={values.userPhoto} />
+  }
+
   return (
     <form className={classes.form} noValidate autoComplete="off" onSubmit={handleSubmit}>
       <Grid container justify="center" alignItems="center">
-        <Avatar className={classes.avatarContainer}>
-          <AccountCircleIcon className={classes.avatar} />
-        </Avatar>
+        {thumbs}
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          {...getRootProps({ className: 'dropzone' })}
+        >
+          <input {...getInputProps()} /> Choose Photo
+        </Button>
       </Grid>
       <TextField
         id="name"

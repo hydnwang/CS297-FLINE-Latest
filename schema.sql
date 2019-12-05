@@ -8,13 +8,14 @@ CREATE TABLE IF NOT EXISTS registration (
     PRIMARY KEY (course_id, user_id)
 );
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT '',
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `major` varchar(100) COLLATE utf8mb4_general_ci DEFAULT '',
-  `interests` text COLLATE utf8mb4_general_ci,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `major` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
+  `interests` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `thumbnail` varchar(100) COLLATE utf8mb4_general_ci DEFAULT '',
   `privacy` int(10) unsigned DEFAULT '0',
   `role` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
