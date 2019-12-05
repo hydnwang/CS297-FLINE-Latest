@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const userModel = require('../models/users')
+const path = require('path')
+var fs = require("fs");
 
 router.get('/all', function (req, res) {
   userModel.getUsersByIds((data) => {
@@ -77,8 +79,13 @@ router.post('/upload', function (req, res) {
     return res.status(400).json({message: 'no file was uploaded'})
   }
   const file = req.files.file
-  
-  file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, err => {
+  let fileFolder = path.join(__dirname, '../../client/public/uploads')
+  let fullFilePath = path.join(fileFolder, file.name)
+  if (!fs.existsSync(fileFolder)) {
+    fs.mkdirSync(fileFolder);
+  }
+  // file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, err => {
+  file.mv(fullFilePath, err => {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
