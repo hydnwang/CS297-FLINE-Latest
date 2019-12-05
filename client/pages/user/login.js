@@ -64,7 +64,7 @@ function FormComponent() {
       })
       if (res.status == 200) {
         const { userId } = await res.json()
-        await login({ token: userId })
+        await loginDir({ token: userId, path: '/' })
       } else {
         let err = new Error(res.statusText)
         err.response = res
