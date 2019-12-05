@@ -1,14 +1,15 @@
 import React from 'react'
 import Layout from '../../components/default_layout';
 import { Container, Grid, ListItem, ListItemAvatar, Button,
-  Avatar, ListItemText, Typography, makeStyles, Paper
+  Avatar, ListItemText, Typography, makeStyles, Paper, Link
 } from '@material-ui/core/';
-import BuildIcon from '@material-ui/icons/Build';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { withAuthSync } from '../../utils/auth';
 
 const get_friends_api = '/api/friendship/get-friends/';
 const get_requests_api = '/api/friendship/get-requests/';
 const accept_request_api = '/api/friendship/accept-friend/';
+
 
 const useStyles = makeStyles(theme => ({
   submit: {
@@ -16,9 +17,15 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.primary,
+    textAlign: 'center'
   },
+  userName: {
+    color: '#FFFFFF'
+  },
+  avatar: {
+    width: 'inherit',
+    height: 'inherit'
+  }
 }));
 
 const Friends = props => {
@@ -26,6 +33,9 @@ const Friends = props => {
   const uid = props.token;
   const [friends, setFriends] = React.useState([]);
   const [requests, setRequests] = React.useState([]);
+  const thumbs = <Avatar>
+    <AccountCircleIcon className={classes.avatar}/>
+  </Avatar>;
 
   React.useEffect(() => {
     getFriends();
@@ -75,10 +85,20 @@ const Friends = props => {
                 <Paper className={classes.paper}>
                   <ListItem key={users.name}>
                     <ListItemAvatar>
-                      <Avatar src="../../public/images/avatar.jpg" />
+                      { users.thumbnail? (<Avatar src={users.thumbnail} />): thumbs }
                     </ListItemAvatar>
                     <ListItemText
-                      primary={users.name}
+                      classes={{
+                        primary: classes.userName
+                      }}
+                      disableTypography={true}
+                      primary={
+                        <Typography style={{ color: '#FFFFFF' }}>
+                          <Link href={`/course/schedule?u_id=${users.id}`}>
+                            {users.name}
+                          </Link>
+                        </Typography>
+                      }
                       secondary='Pending'
                     />
                   </ListItem>
@@ -101,11 +121,17 @@ const Friends = props => {
                 <Paper className={classes.paper}>
                   <ListItem key={users.name}>
                     <ListItemAvatar>
-                      <Avatar src="../../public/images/avatar.jpg" />
+                      { users.thumbnail? (<Avatar src={users.thumbnail} />): thumbs }
                     </ListItemAvatar>
                     <ListItemText
-                      primary={users.name}
-                      secondary={users.status != 'friend'? ('Request has sent'): ('Friend')}
+                      primary={
+                        <Typography style={{ color: '#FFFFFF' }}>
+                          <Link href={`/course/schedule?u_id=${users.id}`}>
+                            {users.name}
+                          </Link>
+                        </Typography>
+                      }
+                      secondary={users.status != 'friend'? ('Request has been sent'): ('Friend')}
                     />
                   </ListItem>
                 </Paper>
@@ -113,6 +139,10 @@ const Friends = props => {
             )
           }
         </Grid>
+        {`Want more friends? `}
+        <Link href="/course/index" variant="body2">
+          {"Find friends from courses"}
+        </Link>
       </Container>
     </Layout>
   );

@@ -5,12 +5,14 @@ import fetch from 'isomorphic-unfetch';
 import { withAuthSync } from '../../utils/auth';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios'
+import Router from 'next/router'
 
 // Styles
 import Layout from '../../components/default_layout';
 import {
   Container, TextField, FormControl, IconButton, Button,
-  InputLabel, OutlinedInput, InputAdornment, Typography, Link, Avatar, Grid
+  InputLabel, OutlinedInput, InputAdornment, Avatar, Grid, 
+  SnackbarContent
 } from '@material-ui/core/';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/styles';
@@ -42,6 +44,9 @@ const useStyles = makeStyles(theme => ({
   },
   inputFile: {
     // display: 'none', 
+  },
+  errorBar: {
+    backgroundColor: theme.palette.error.dark,
   }
 }));
 
@@ -65,6 +70,9 @@ function FormComponent(props) {
   //   console.log(f)
   //   setFile(f)
   // }
+  const [file, setFile] = React.useState('');
+  const [dropFile, setDropFile] = React.useState([])
+
   const [values, setValues] = React.useState({
     realname: (props.data.name) ? props.data.name:'', 
     username: props.data.email, 
@@ -76,6 +84,7 @@ function FormComponent(props) {
     passwordErr: '', 
     showPassword: false, 
     userPhoto: (props.data.thumbnail) ? props.data.thumbnail:'', 
+    userPhotoErr: '', 
   });
   const handleChange = prop => (event, val) => {
     let v
@@ -98,18 +107,23 @@ function FormComponent(props) {
   const handleSubmit = async event => {
     event.preventDefault()
 
-    const formData = new FormData()
-    formData.append('file', file)
-    try {
-      const res = await axios.post('/api/users/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      console.log(res.data)
-      const { fileName, filePath } = res.data
-      // setUploadFile({ fileName, filePath })
-      values.userPhoto = filePath
-    } catch (error) {
-      console.log(error.response)
+    if (file != null && file != '') {
+      const formData = new FormData()
+      formData.append('file', file)
+      try {
+        const res = await axios.post('/api/users/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        console.log(res.data)
+        const { fileName, filePath } = res.data
+        // setUploadFile({ fileName, filePath })
+        values.userPhoto = filePath
+      } catch (error) {
+        console.log(error.response)
+        values.userPhotoErr = error.response
+        values.error = error.response
+        setValues({ ...values, error: error.response, userPhotoErr: error.response })
+      }
     }
 
     const URL = '/api/users/update';
@@ -148,8 +162,6 @@ function FormComponent(props) {
     }
   };
 
-  const [file, setFile] = React.useState('');
-  const [dropFile, setDropFile] = React.useState([])
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: acceptedFiles => {
@@ -163,6 +175,7 @@ function FormComponent(props) {
     // Make sure to revoke the data uris to avoid memory leaks
     dropFile.forEach(file => URL.revokeObjectURL(file.preview));
   }, [dropFile]);
+
   let thumbs = <Avatar className={classes.avatarContainer}>
     <AccountCircleIcon className={classes.avatar} />
   </Avatar>
@@ -176,7 +189,13 @@ function FormComponent(props) {
   return (
     <form className={classes.form} noValidate autoComplete="off" onSubmit={handleSubmit}>
       <Grid container justify="center" alignItems="center">
+        {values.error &&
+          <SnackbarContent
+            className={classes.errorBar}
+            message={`Error: ${values.error}`}
+          />}
         {thumbs}
+        <br />
         <Button
           fullWidth
           variant="contained"

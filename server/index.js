@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const next = require('next')
 const cookieParser = require('cookie-parser')
-const dev = process.env.NODE_DEV !== 'production'
+const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev, dir: FRONT_DIR })
 const handle = app.getRequestHandler()
 const fileUpload = require('express-fileupload')

@@ -31,9 +31,9 @@ const Main = props => {
           </GridContainer>
         </div>
       </Parallax>
-      <div  className={classNames(classes.main, classes.mainRaised)}>
-        <Container maxWidth="md" style={{ flex: 1 }} className ={classes.content}>
-          <h1>Discover something</h1>
+      <div className={classNames(classes.main, classes.mainRaised)}>
+        <Container maxWidth="md" style={{ flex: 1 }}>
+          <h1>Friends' Update</h1>
           <Newsfeed uid={props.token} />
         </Container>
       </div>
