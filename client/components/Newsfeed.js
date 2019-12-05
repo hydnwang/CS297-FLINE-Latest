@@ -35,26 +35,32 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function TabPanel(props) {
-  const { children, index, ...other } = props;
+const calulateTimeDiff = (timestamp) => {
+  let now = new Date().getTime();
+  let diff = now - timestamp;
+  const sec = 1000;
+  const min = 60 * sec;
+  const hour = 60 * min;
+  const day = hour * 24;
+  const month = 30 * day;
+  const year = 12 * month;
 
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      <Box p={3}>{children}</Box>
-    </Typography>
-  );
+  if (diff > year) {
+    return Math.floor(diff / year) + " year(s) ago";
+  } else if (diff > month) {
+    return Math.floor(diff / month) + " month(s) ago";
+  } else if (diff > day) {
+    return Math.floor(diff / day) + " day(s) ago";
+  } else if (diff > hour) {
+    return Math.floor(diff / hour) + " hour(s) ago";
+  } else if (diff > min) {
+    return Math.floor(diff / min) + " minutes(s) ago";
+  } else if (diff > 5 * sec) {
+    return Math.floor(diff / sec) + " second(s) ago";
+  } else {
+    return "Few seconds ago";
+  }
 }
-
-TabPanel.propTypes = {
-  children: PropTypes.node
-};
-
 
 export default function Newsfeed(props) {
   const classes = useStyles();
@@ -68,7 +74,6 @@ export default function Newsfeed(props) {
   };
 
   const handleClickMore = (course_id, course_title, term) => {
-    console.log("handleClickMore");
     Router.push({
       pathname: '/course/details',
       query: {
@@ -109,17 +114,24 @@ export default function Newsfeed(props) {
             >
               <ListItemText
                 primary={
+                  <Typography variant="h6" >
+                    {item.course_title.replace(/,/g, ' ').toUpperCase()}
+                  </Typography>
+                }
+                secondary={
                   <React.Fragment>
                     <Typography
                       component="span"
+                      variant="body2"
+                      className={classes.inline}
                       color="textPrimary"
                     >
-                      {item.course_title.replace(/,/g, ' ').toUpperCase()}
+                      {`Enrolled by ${item.name}`}
                     </Typography>
+                    {` ———— ${calulateTimeDiff(item.reg_time)}`}
                   </React.Fragment>
                 }
-                secondary={`Enrolled by ${item.name}`}
-              />
+              />  
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="more"
                   onClick={e => handleClickMore(item.course_id, item.course_title.split(','), item.term)}>

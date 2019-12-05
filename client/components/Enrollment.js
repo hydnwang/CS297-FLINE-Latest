@@ -78,7 +78,7 @@ export default function Enrollment(props) {
       <List>
         {
           students.map((student) =>
-            <ListItem key={student.name}>
+            <ListItem key={student.id}>
               <ListItemAvatar>
                 { student.thumbnail? (<Avatar src={student.thumbnail} />): thumbs }
               </ListItemAvatar>

@@ -81,9 +81,9 @@ const Friends = props => {
         <Grid container spacing={3}>
           {
             requests.map((users) =>
-              <Grid item xs={4}>
+              <Grid item xs={4} key={users.id}>
                 <Paper className={classes.paper}>
-                  <ListItem key={users.name}>
+                  <ListItem>
                     <ListItemAvatar>
                       { users.thumbnail? (<Avatar src={users.thumbnail} />): thumbs }
                     </ListItemAvatar>
@@ -91,15 +91,8 @@ const Friends = props => {
                       classes={{
                         primary: classes.userName
                       }}
-                      disableTypography={true}
-                      primary={
-                        <Typography style={{ color: '#FFFFFF' }}>
-                          <Link href={`/course/schedule?u_id=${users.id}`}>
-                            {users.name}
-                          </Link>
-                        </Typography>
-                      }
-                      secondary='Pending'
+                      primary={users.name}
+                      secondary="Pending"
                     />
                   </ListItem>
                   <Button
@@ -117,21 +110,21 @@ const Friends = props => {
           }
           {
             friends.map((users) =>
-              <Grid item xs={4}>
+              <Grid item xs={4} key={users.id}>
                 <Paper className={classes.paper}>
-                  <ListItem key={users.name}>
+                  <ListItem>
                     <ListItemAvatar>
                       { users.thumbnail? (<Avatar src={users.thumbnail} />): thumbs }
                     </ListItemAvatar>
                     <ListItemText
-                      primary={
-                        <Typography style={{ color: '#FFFFFF' }}>
+                      primary={ users.status == 'friend'?
+                        (<Typography style={{ color: '#FFFFFF' }}>
                           <Link href={`/course/schedule?u_id=${users.id}`}>
                             {users.name}
                           </Link>
-                        </Typography>
+                        </Typography>): users.name
                       }
-                      secondary={users.status != 'friend'? ('Request has been sent'): ('Friend')}
+                      secondary={users.status == 'friend'? ('Friend'): ('Request has been sent')}
                     />
                   </ListItem>
                 </Paper>
@@ -139,6 +132,7 @@ const Friends = props => {
             )
           }
         </Grid>
+        <p></p>
         {`Want more friends? `}
         <Link href="/course/index" variant="body2">
           {"Find friends from courses"}
