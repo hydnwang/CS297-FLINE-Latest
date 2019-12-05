@@ -1,7 +1,7 @@
 // Libraries
 import React from 'react';
 import fetch from 'isomorphic-unfetch';
-import { login, withAuthSync } from '../../utils/auth';
+import { loginDir, withAuthSync } from '../../utils/auth';
 
 // Styles
 import { 
