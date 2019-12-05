@@ -6,7 +6,9 @@ import Head from 'next/head';
 import Nav from './nav';
 import Footer from './footer';
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
-import { useMediaQuery, createMuiTheme, CssBaseline, Box } from '@material-ui/core';
+import { useMediaQuery, createMuiTheme, CssBaseline, Box,
+  Card, CardContent, CardMedia
+} from '@material-ui/core';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,10 +20,15 @@ const useStyles = makeStyles(theme => ({
   footer: {
     padding: theme.spacing(2),
   },
+  banner: {
+    height: '300px',
+  },
+  noBanner: {
+    height: 'auto',
+  },
 }));
 
-// export default ({ children, title='' }) => {
-const Layout = ({ title, loginStatus, children }) => {
+const Layout = ({ title, loginStatus, children, background }) => {
   const subtitle = (title !== '' && title !== undefined) ? ' | ' + title : '';
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const default_theme = React.useMemo(() => createMuiTheme({
@@ -39,7 +46,15 @@ const Layout = ({ title, loginStatus, children }) => {
           <title>FLINE{subtitle}</title>
         </Head>
         <Nav loginStatus={loginStatus} currentPage={title}/>
-        {children}
+        <Card>
+          <CardMedia
+            className={background? classes.banner: classes.noBanner}
+            image={background}
+          />
+          <CardContent>
+            {children}
+          </CardContent>
+        </Card>
         <Footer />
       </Box>
     </ThemeProvider>

@@ -5,6 +5,7 @@ import { Container, Grid, ListItem, ListItemAvatar, Button,
 } from '@material-ui/core/';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { withAuthSync } from '../../utils/auth';
+import background from '../../public/images/friends.png';
 
 const get_friends_api = '/api/friendship/get-friends/';
 const get_requests_api = '/api/friendship/get-requests/';
@@ -25,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     width: 'inherit',
     height: 'inherit'
-  }
+  },
 }));
 
 const Friends = props => {
@@ -75,7 +76,7 @@ const Friends = props => {
   }
 
   return (
-    <Layout title="Friends" loginStatus={props.loginStatus}>
+    <Layout title="Friends" loginStatus={props.loginStatus} background={background}>
       <Container maxWidth="md" style={{ flex: 1 }}>
         <h1>Friends</h1>
         <Grid container spacing={3}>
@@ -88,9 +89,6 @@ const Friends = props => {
                       { users.thumbnail? (<Avatar src={users.thumbnail} />): thumbs }
                     </ListItemAvatar>
                     <ListItemText
-                      classes={{
-                        primary: classes.userName
-                      }}
                       primary={users.name}
                       secondary="Pending"
                     />

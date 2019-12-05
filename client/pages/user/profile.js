@@ -21,6 +21,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MajorList from '../../components/user/major_list';
 import InterestList from '../../components/user/interest_list';
 import ButtonLink from '../../components/button_link';
+import background from '../../public/images/landing-bg.jpg';
+
 const useStyles = makeStyles(theme => ({
   form: {
     marginBottom: 150, 
@@ -312,7 +314,7 @@ function FormComponent(props) {
 // Main
 const Profile = ({ data, token, loginStatus }) => {
   return (
-    <Layout title="Profile Settings" loginStatus={loginStatus}>
+    <Layout title="Profile Settings" loginStatus={loginStatus} background={background}>
       <Container maxWidth="sm" style={{ flex: 1 }}>
         <h1>Profile Settings</h1>
         <FormComponent data={data} uid={token} />
