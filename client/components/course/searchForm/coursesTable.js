@@ -15,6 +15,7 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import CourseSearch from '../../../pages/course/index';
 const fetch = require("node-fetch");
 
 const useStyles = makeStyles(theme => ({
@@ -38,12 +39,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
-
 const checkReg=(courses, c_id)=>{
-  // console.log(c_id+"in courses is"+courses.has(c_id));
+  console.log(c_id+"in courses is"+courses.has(c_id));
   if(courses.size>0){
-    return courses.has(parseInt(c_id))
+    return courses.has(c_id)
   }
   else return false;
 };
@@ -90,48 +89,6 @@ const parseTime=(str)=>{
   return res;
 };
 
-const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id) => {
-  
-  if(user_id==undefined) user_id=0;
-  var times="";
-  meeting_time.forEach(item=>{
-    if(item.length ==2){
-      times=times.concat(parseTime(item[0])); //item[0] is time, item[1] is classroom
-    }
-  })
-  var title ="";
-  course_title.forEach(item=>{
-    title=title.concat(item+",");
-  })
-  if(event.target.checked){
-    fetch('/api/registration/add', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstParam: course_id,
-        secondParam: user_id,
-        thirdParam: title,
-        forthParam: course_type,
-        fifthParam: times,
-      })
-    })
-  }else{
-    fetch('/api/registration/drop', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstParam: course_id,
-        secondParam: user_id,
-      })
-    })
-  }
-};
 const handleJump =function (event, course_id,course_title,term){
   var title ="";
   course_title.forEach(item=>{
@@ -147,14 +104,56 @@ const handleJump =function (event, course_id,course_title,term){
 };
 
 const coursesTable = props => {
+  const [status, setStatus] = useState(false);
   const { className, users, ...rest } = props;
   const user_id=props.token;
   const term = props.term;
-  // console.log("user_id:"+user_id);
-  const courses=props.courses;
-  // console.log("21490"+ courses);
   const classes = useStyles();
+  const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id) => {
   
+    if(user_id==undefined) user_id=0;
+    var times="";
+    meeting_time.forEach(item=>{
+      if(item.length ==2){
+        times=times.concat(parseTime(item[0])); //item[0] is time, item[1] is classroom
+      }
+    })
+    var title ="";
+    course_title.forEach(item=>{
+      title=title.concat(item+",");
+    })
+    if(event.target.checked){
+      fetch('/api/registration/add', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstParam: course_id,
+          secondParam: user_id,
+          thirdParam: title,
+          forthParam: course_type,
+          fifthParam: times,
+        })
+      }).then(props.courses.add(course_id))
+      .then(() => setStatus({status:!status}))
+    }else{
+      fetch('/api/registration/drop', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstParam: course_id,
+          secondParam: user_id,
+        })
+      }).then(props.courses.delete(course_id))
+      .then(() => setStatus({status:!status}))
+    }
+  };
+
   return (
     <div>
       {users&&users.map((user)=>(
@@ -192,12 +191,21 @@ const coursesTable = props => {
                       key={section.classCode}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
+                        {status==true?(
+                          <Checkbox
                           color="primary"
-                          checked={checkReg(courses,section.classCode)}
+                          checked={checkReg(props.courses,section.classCode)}
                           onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
                           value="true"
                         />
+                         ):(
+                          <Checkbox
+                          color="primary"
+                          checked={checkReg(props.courses,section.classCode)}
+                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
+                          value="true"
+                        />
+                         )}
                       </TableCell>
                       <TableCell>
                         <div className={classes.nameContainer}>
