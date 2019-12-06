@@ -10,9 +10,17 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev, dir: FRONT_DIR })
 const handle = app.getRequestHandler()
 const fileUpload = require('express-fileupload')
+const path = require('path')
+const fs = require('fs')
 
 app.prepare().then(() => {
   // express code here
+  const BASE_UPLOAD_FOLDER = 'client/static/uploads'
+  let fileFolder = path.join(__dirname, `../${BASE_UPLOAD_FOLDER}`)
+  if (!fs.existsSync(fileFolder)) {
+    fs.mkdirSync(fileFolder, { recursive: true });
+  }
+
   const server = express()
   server.use(cookieParser())
   server.use(bodyParser.json())
