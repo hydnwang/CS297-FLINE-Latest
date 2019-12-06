@@ -19,8 +19,6 @@ build*
 .DS_Store
 .env*
 !.env.local
-client/public/uploads/*
-client/static/uploads/*
 
 # debug
 npm-debug.log*
