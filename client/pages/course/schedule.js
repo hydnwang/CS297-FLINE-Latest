@@ -6,6 +6,9 @@ import { ViewState } from '@devexpress/dx-react-scheduler';
 import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
 const fetch = require("node-fetch");
+import Router from "next/router";
+import TermSelector from '../../components/course/searchForm/TermSelector.js';
+import Grid from '@material-ui/core/Grid';
 
 const Appointment = ({
   children, style, ...restProps
@@ -43,7 +46,7 @@ const parseTime=function(data){
   var slot=item.meeting_time;
   var array=slot.split(',');
   
-  console.log(array);
+  // console.log(array);
   array.forEach(time=>{
     if(time.length>3){
       var json={title: item.course_title,
@@ -94,14 +97,12 @@ const parseTime=function(data){
         end_min = parseInt(hour_slot[3]);
       }
       json.startDate=new Date(year+1900, month, day, start_hour, start_min);
-      // console.log("course time:"+ json.startDate.toLocaleDateString());
-      // console.log("year:"+dates[0].getYear());
       json.endDate=new Date(year+1900, month, day, end_hour, end_min);
       res.push(json);
     }
   })
 });
-console.log(res);
+// console.log(res);
 return res;
 };
 
@@ -112,7 +113,8 @@ class Schedule extends React.PureComponent {
     this.state = {
       data: [],
       currentDate: new Date('2019-11-27'),
-      userName: ''
+      userName: '',
+      term: '2020-Winter',
     };
   }
 
@@ -120,7 +122,15 @@ class Schedule extends React.PureComponent {
     return {query}
   }
 
-  componentWillMount() {
+  setTerm = (term) => {
+    this.setState({ term: term });
+    console.log('in setTerm:' + term);
+    this.getCourse(term);
+  };
+
+  getCourse = (term)=>{
+    console.log("in gerCourse:"+ term);
+    console.log("in gerCourse this.state.term:"+this.state.term);
     var u_id = this.props.query.u_id || this.props.token;
     if (u_id != undefined) {
       fetch('/api/users/' + u_id)
@@ -130,7 +140,8 @@ class Schedule extends React.PureComponent {
         })
     }
     const params={
-      user_id:u_id
+      user_id:u_id,
+      term:term,
     };
     const url = '/api/schedule?'+ querystring.stringify(params);
 
@@ -140,18 +151,23 @@ class Schedule extends React.PureComponent {
        this.setState({data:parseTime(data)}) ;
       })
       .catch(e => console.log('错误:', e));
+  }
 
-  };
-
+  componentWillMount(){
+    this.getCourse(this.state.term);
+  }
   render()
   {
     const { data, currentDate, userName } = this.state;
     return (
       <Layout title="Schedule" loginStatus={this.props.loginStatus}>
-        <Container maxWidth="12" style={{ flex: 1 }}>
+        <Container maxWidth = 'lg' style={{ flex: 1 }}>
           <h1>{userName? (userName + "'s Schedule"): ("Schedule")}</h1>
+          <Grid item xs={12}>
+            <TermSelector term={this.state.term} setTerm={this.setTerm} />
+          </Grid>
           <Scheduler
-          data = {data}
+          data = {this.state.data}
           >
             <ViewState
             />
@@ -159,7 +175,9 @@ class Schedule extends React.PureComponent {
               startDayHour={8}
               endDayHour={20}
             />
-            <Appointments appointmentComponent={Appointment}/>
+            <Appointments appointmentComponent={Appointment}>
+              {/* <a onClick = {event =>handleJump(event,section.classCode,user.name, term)} /> */}
+            </Appointments>
           </Scheduler>
         </Container>
       </Layout>

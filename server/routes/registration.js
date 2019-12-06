@@ -8,13 +8,13 @@ router.get('/', function(req, res) {
 
 router.post('/add', function(req, res) {
 	console.log(req.body);
-	Reg.addCourse(req.body.firstParam,req.body.secondParam,req.body.thirdParam,req.body.forthParam,req.body.fifthParam, req.body.term);
+	Reg.addCourse(req.body.firstParam,req.body.secondParam,req.body.thirdParam,req.body.forthParam,req.body.fifthParam, req.body.sixthParam);
 	res.send("ok");
 })
 
 router.post('/drop', function(req, res) {
 	console.log(req.body);
-	Reg.dropCourse(req.body.firstParam, req.body.secondParam);
+	Reg.dropCourse(req.body.firstParam, req.body.secondParam, req.body.thirdParam);
 	res.send("ok");
 })
 

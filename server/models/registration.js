@@ -4,8 +4,7 @@ const mysql = require('mysql')
 
 exports.addCourse=function(course_id, user_id, course_title, course_type, course_time, term){
     var date = new Date();
-    var if_take=false;
-    selectCourse(course_id, user_id, (Data) => {
+    selectCourse(course_id, user_id, term,(Data) => {
         if (Array.isArray(Data) && Data.length) {
           console.log("you are already in the course");
         } else {
@@ -18,10 +17,10 @@ exports.addCourse=function(course_id, user_id, course_title, course_type, course
         }
     });
 }
-exports.dropCourse=function(course_id, user_id){
+exports.dropCourse=function(course_id, user_id, term){
     var c_id=parseInt(course_id);
-    var query = "delete from registration where course_id = ? and user_id = ?";
-    var value = [c_id,user_id];
+    var query = "delete from registration where course_id = ? and user_id = ? and term = ? ";
+    var value = [c_id,user_id, term];
     query=mysql.format(query, value);
     sql.query(query,function(err,result){
         if (err) throw err;
@@ -29,9 +28,9 @@ exports.dropCourse=function(course_id, user_id){
     });
 };
 
-selectCourse = function(course_id, user_id,callback){
-    let query = 'SELECT * FROM registration WHERE ??=? AND ??=?'
-    let param = ['course_id', course_id, 'user_id', user_id]
+selectCourse = function(course_id, user_id, term, callback){
+    let query = 'SELECT * FROM registration WHERE ??=? AND ??=? AND ?? = ?'
+    let param = ['course_id', course_id, 'user_id', user_id, 'term', term]
     sql.query(query, param, function (error, result) {
     if (error) { console.log('[Error] ', error) }
     callback(result);

@@ -24,7 +24,9 @@ const useStyles = makeStyles(theme => ({
     // padding: 100
   },
   inner: {
-    minWidth: 1050
+    minWidth: 800,
+    overflowX: 'auto',
+    overflowY: 'auto',
   },
   nameContainer: {
     display: 'flex',
@@ -107,7 +109,7 @@ const coursesTable = props => {
   const user_id=props.token;
   const term = props.term;
   const classes = useStyles();
-  const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id) => {
+  const handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
   
     if(user_id==undefined) user_id=0;
     var times="";
@@ -133,6 +135,7 @@ const coursesTable = props => {
           thirdParam: title,
           forthParam: course_type,
           fifthParam: times,
+          sixthParam: term,
         })
       }).then(props.courses.add(course_id))
       .then(() => setStatus({status:!status}))
@@ -146,6 +149,7 @@ const coursesTable = props => {
         body: JSON.stringify({
           firstParam: course_id,
           secondParam: user_id,
+          thirdParam: term,
         })
       }).then(props.courses.delete(course_id))
       .then(() => setStatus({status:!status}))
@@ -161,7 +165,7 @@ const coursesTable = props => {
         >
         <CardContent className={classes.content}>
           <p>{user.name[0]+" "+user.name[1]+" "+user.name[2]}</p>
-          <PerfectScrollbar>
+          {/* <PerfectScrollbar> */}
             <div className={classes.inner}>
               <Table>
                 <TableHead>
@@ -193,14 +197,14 @@ const coursesTable = props => {
                           <Checkbox
                           color="primary"
                           checked={checkReg(props.courses,section.classCode)}
-                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
+                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id,term)}
                           value="true"
                         />
                          ):(
                           <Checkbox
                           color="primary"
                           checked={checkReg(props.courses,section.classCode)}
-                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id)}
+                          onChange={event => handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id,term)}
                           value="true"
                         />
                          )}
@@ -234,7 +238,7 @@ const coursesTable = props => {
                 </TableBody>
               </Table>
             </div>
-          </PerfectScrollbar>
+          {/* </PerfectScrollbar> */}
         </CardContent>
       </Card>
       ))}
@@ -246,12 +250,5 @@ coursesTable.propTypes = {
   className: PropTypes.string,
   users: PropTypes.array.isRequired
 };
-
-// React.render((
-//   <Router>
-//     <Route path="/course/details/:name" component={Details}>
-//     </Route>
-//   </Router>
-// ), document.body)
 
 export default coursesTable;

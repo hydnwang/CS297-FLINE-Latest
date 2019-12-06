@@ -1,20 +1,11 @@
 import React from 'react'
-import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
-const fetch = require("node-fetch");
-import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 import Enrollment from '../../components/Enrollment'
 import CourseDetails from '../../components/course/searchForm/course_details';
 import Layout from '../../components/default_layout';
 import { withRouter } from 'next/router';
 import background from '../../public/images/pets.jpg';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(4)
-  }
-}));
 
 class Details extends React.PureComponent {
     constructor(props) {
@@ -30,6 +21,7 @@ class Details extends React.PureComponent {
       }
 
     render(){
+      const { classes, ...rest } = this.props;
         return (
           <Layout loginStatus={this.props.loginStatus} >
             <div style={{backgroundImage: `url(${background})`}}>
