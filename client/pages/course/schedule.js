@@ -5,6 +5,7 @@ import { Scheduler, WeekView,Appointments } from '@devexpress/dx-react-scheduler
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
+import background from '../../public/images/time.jpg';
 const fetch = require("node-fetch");
 import Router from "next/router";
 import TermSelector from '../../components/course/searchForm/TermSelector.js';
@@ -160,7 +161,7 @@ class Schedule extends React.PureComponent {
   {
     const { data, currentDate, userName } = this.state;
     return (
-      <Layout title="Schedule" loginStatus={this.props.loginStatus}>
+      <Layout title="Schedule" loginStatus={this.props.loginStatus} background={background}>
         <Container maxWidth = 'lg' style={{ flex: 1 }}>
           <h1>{userName? (userName + "'s Schedule"): ("Schedule")}</h1>
           <Grid item xs={12}>

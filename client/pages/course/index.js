@@ -13,6 +13,7 @@ const fetch = require("node-fetch");
 import DeptBar from '../../components/course/searchForm/DeptBar';
 import ItemList from '../../components/course/searchForm/ItemList';
 import { withAuthSync } from '../../utils/auth';
+import background from '../../public/images/books.jpg';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -95,7 +96,7 @@ class SearchForm extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Layout title='Course' loginStatus={this.props.loginStatus}>
+      <Layout title='Course' loginStatus={this.props.loginStatus} background={background}>
         <Container maxWidth="sm" style={{ flex: 1 }}>
         <h1>Course Search</h1>
           <div >
