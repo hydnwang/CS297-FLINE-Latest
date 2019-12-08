@@ -14,10 +14,11 @@ import DeptBar from '../../components/course/searchForm/DeptBar';
 import ItemList from '../../components/course/searchForm/ItemList';
 import { withAuthSync } from '../../utils/auth';
 import background from '../../public/images/books.jpg';
+import CourseList from '../../components/course/searchForm/CourseList'
+import { userInfo } from 'os';
 
 const useStyles = makeStyles(theme => ({
   container: {
-    display: 'flex',
     flexWrap: 'wrap',
   },
   textField: {
@@ -47,6 +48,7 @@ class SearchForm extends Component {
       coursesFull: 'ANY',
       building: '',
       apiResponse:"",
+      courseList: [],
     };
   }
 
@@ -93,18 +95,142 @@ class SearchForm extends Component {
     // console.log(this.state.apiResponse);
   }
 
+  componentWillMount(){
+    const params={
+      user_id:this.props.token,
+    };
+    const url = 'http://localhost:3000/api/schedule?'+ querystring.stringify(params);
+    console.log(url);
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        var rObj = new Set();
+        // console.log("in getcourse")
+        data.forEach(function(obj){
+          rObj.add(obj.course_id);
+        });
+        // console.log("rObj.size"+rObj.size);
+        this.setState({courseList:rObj});
+      })
+      .catch(e => console.log('错误:', e));
+  };
+
+  parseTime=(str)=>{
+    var res ="";
+    // console.log("str:"+str);
+    var array=[];
+    var i=0;
+    if(str.length>3){
+      for(;i<str.length;i++){
+        if(str.charAt(i)=='M'||str.charAt(i)=='F'||str.charAt(i)=='W'){
+          array.push(""+str.charAt(i));
+        }else if(str.charAt(i)=='T'){
+          var weekday="";
+          if(str.charAt(i+1)=='u'){
+            weekday="Tu";
+            i++;
+          }else if(str.charAt(i+1)=='h'){
+            weekday="Th";
+            i++;
+          }
+          if(weekday.length>0){
+            array.push(weekday);
+          }
+        }else{
+          break;
+        }
+      }
+      var daytime = str.substring(i,str.length);
+      daytime = daytime.replace(/\s+/g,"");
+      console.log("daytime:"+daytime);
+  
+      for(var j=0;j<array.length;j++){
+        var temp = array[j];
+        temp=temp.concat(" "+ daytime+",");
+        console.log("array[j]"+temp);
+        res=res.concat(temp);
+      }
+    }else{
+      res=str;
+    }
+    console.log("parseTime:"+res);
+    return res;
+  };
+
+  addCourseList=(course_id)=>{
+    var course_list = this.state.courseList;
+    course_list.add(parseInt(course_id));
+    return course_list;
+  }
+
+  dropCourseList=(course_id)=>{
+    var course_list = this.state.courseList;
+    course_list.delete(parseInt(course_id));
+    return course_list;
+  }
+
+  handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
+  
+    if(user_id==undefined) user_id=0;
+    var times="";
+    meeting_time.forEach(item=>{
+      if(item.length ==2){
+        times=times.concat(this.parseTime(item[0])); //item[0] is time, item[1] is classroom
+      }
+    })
+    var title ="";
+    course_title.forEach(item=>{
+      title=title.concat(item+",");
+    })
+    if(event.target.checked){
+      fetch('/api/registration/add', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstParam: course_id,
+          secondParam: user_id,
+          thirdParam: title,
+          forthParam: course_type,
+          fifthParam: times,
+          sixthParam: term,
+        })
+      }).then(this.setState({courseList:this.addCourseList(course_id)}))
+      .then(this.setState({status:!this.state.status}))
+    }else{
+      fetch('/api/registration/drop', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstParam: course_id,
+          secondParam: user_id,
+          thirdParam: term,
+        })
+      }).then(this.setState({courseList:this.dropCourseList(course_id)}))
+      .then(this.setState({status:!this.state.status}))
+    }
+  };
+
   render() {
     const { classes } = this.props;
+    console.log("courseList:"+this.state.courseList);
     return (
       <Layout title='Course' loginStatus={this.props.loginStatus} background={background}>
-        <Container maxWidth="sm" style={{ flex: 1 }}>
-        <h1>Course Search</h1>
-          <div >
+        <Container maxWidth='lg' >
+        <Grid container spacing={8}>
+          <Grid item >
+          <h1>Course Search</h1>
+            <div >
               <Grid container
                 direction="row"
                 alignItems="center"
                 spacing={2}
-                maxWidth="sm" style={{ flex: 1 }}>
+                maxWidth="sm" >
                 <Grid item xs={12}>
                   <TermSelector term={this.state.term} setTerm={this.setTerm} />
                 </Grid>
@@ -117,7 +243,7 @@ class SearchForm extends Component {
                 alignItems="center"
                 spacing={2}
                 maxWidth="sm" 
-                style={{ flex: 1 }}>
+                >
                 <Grid item xs={12}>
                   <GESelector ge={this.state.ge} setGE={this.setGE}  />
                   </Grid>
@@ -135,8 +261,14 @@ class SearchForm extends Component {
                 </Grid>
               </Grid>
           </div>
+          </Grid>
+          <Grid item className = {classes.textField} spacing={2} style={{overflow: 'auto'}, {maxHeight: 200}}>
+            <h1>My Courses:</h1>
+            <CourseList token = {this.props.token} courseSet = {this.state.courseList}></CourseList>
+          </Grid>
+        </Grid>
         </Container>
-        <ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term}></ItemList>
+        <ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term} courses = {this.state.courseList} handleSelectOne = {this.handleSelectOne}></ItemList>
       </Layout>
     );
   }

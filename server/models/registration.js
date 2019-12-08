@@ -35,4 +35,13 @@ selectCourse = function(course_id, user_id, term, callback){
     if (error) { console.log('[Error] ', error) }
     callback(result);
   });
-}
+};
+
+exports.searchCourse = function(course_id,user_id,callback){
+    let query = 'SELECT * FROM registration WHERE ??=? and ?? = ? limit 1'
+    let param = ['course_id', course_id, 'user_id', user_id]
+    sql.query(query, param, function (error, result) {
+    if (error) { console.log('[Error] ', error) }
+    callback(result);
+    });
+};

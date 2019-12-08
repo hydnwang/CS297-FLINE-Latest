@@ -3,7 +3,9 @@ const router = express.Router()
 const Reg = require('../models/registration')
 
 router.get('/', function(req, res) {
-	res.send("registration");
+	Reg.searchCourse(req.query.course_id,req.query.user_id, (data)=>{
+		res.send(data);
+	})
 })
 
 router.post('/add', function(req, res) {

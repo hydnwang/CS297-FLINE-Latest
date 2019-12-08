@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS registration (
     course_type VARCHAR(100) NOT NULL,
     meeting_time VARCHAR(100) NOT NULL,
     term VARCHAR(100) NOT NULL,
-    PRIMARY KEY (course_id, user_id)
+    PRIMARY KEY (course_id, user_id,term)
 );
 
 CREATE TABLE `users` (

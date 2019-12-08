@@ -7,7 +7,6 @@ import querystring from 'querystring';
 import { withAuthSync } from '../../utils/auth';
 import background from '../../public/images/time.jpg';
 const fetch = require("node-fetch");
-import Router from "next/router";
 import TermSelector from '../../components/course/searchForm/TermSelector.js';
 import Grid from '@material-ui/core/Grid';
 
@@ -177,7 +176,6 @@ class Schedule extends React.PureComponent {
               endDayHour={20}
             />
             <Appointments appointmentComponent={Appointment}>
-              {/* <a onClick = {event =>handleJump(event,section.classCode,user.name, term)} /> */}
             </Appointments>
           </Scheduler>
         </Container>
