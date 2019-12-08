@@ -12,7 +12,6 @@ const handle = app.getRequestHandler()
 const fileUpload = require('express-fileupload')
 
 app.prepare().then(() => {
-  // express code here
   const server = express()
   server.use(cookieParser())
   server.use(bodyParser.json())

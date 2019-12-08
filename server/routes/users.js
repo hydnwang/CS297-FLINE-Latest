@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const userModel = require('../models/users')
 const path = require('path')
-var fs = require("fs");
+const BASE_UPLOAD_URL = 'http://localhost:3000/static/uploads'
+const BASE_UPLOAD_FOLDER = '/client/static/uploads'
 
 router.get('/all', function (req, res) {
   userModel.getUsersByIds((data) => {
@@ -78,19 +79,17 @@ router.post('/upload', function (req, res) {
   if (req.files == null) {
     return res.status(400).json({message: 'no file was uploaded'})
   }
+
   const file = req.files.file
-  let fileFolder = path.join(__dirname, '../../client/public/uploads')
+  let fileFolder = path.join(__dirname, `../..${BASE_UPLOAD_FOLDER}`)
   let fullFilePath = path.join(fileFolder, file.name)
-  if (!fs.existsSync(fileFolder)) {
-    fs.mkdirSync(fileFolder);
-  }
-  // file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, err => {
+
   file.mv(fullFilePath, err => {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
-    res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+    res.json({ fileName: file.name, filePath: `${BASE_UPLOAD_URL}/${file.name}` });
   })
 })
 
