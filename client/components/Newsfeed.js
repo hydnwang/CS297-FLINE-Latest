@@ -65,7 +65,7 @@ const calulateTimeDiff = (timestamp) => {
 export default function Newsfeed(props) {
   const classes = useStyles();
   const [items, setItems] = React.useState([]);
-  const [courseId, setCourse] = React.useState(null);
+  const [courseId, setCourse] = React.useState();
   const [selectedIndex, setSelectedIndex] = React.useState(null);
   
   const handleClick = (event, idx, course_id) => {
@@ -88,7 +88,7 @@ export default function Newsfeed(props) {
     getItems();
     const interval = setInterval(() => {
       getItems();
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);

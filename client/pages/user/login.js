@@ -12,6 +12,8 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import Layout from '../../components/default_layout';
+import background from '../../public/images/landing-bg.jpg';
+
 const useStyles = makeStyles(theme => ({
   form: {},
   textField: {
@@ -160,7 +162,7 @@ function FormComponent() {
 // Main
  const Login = props => {
   return (
-    <Layout title="Login" loginStatus={props.loginStatus}>
+    <Layout title="Login" loginStatus={props.loginStatus} background={background}>
       <Container maxWidth="sm" style={{ flex: 1 }}>
         <h1>User Login</h1>
         <FormComponent />
