@@ -51,6 +51,7 @@ export default function Enrollment(props) {
   }, [props.courseId]);
 
   const getEnrollment = (courseId) => {
+    if (courseId === undefined) return;
     // console.log('getEnrollment course id=' + courseId);
     fetch(enrollment_api + courseId)
       .then(result => result.json())
