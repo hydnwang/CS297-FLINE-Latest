@@ -17,19 +17,19 @@ import background from '../../public/images/books.jpg';
 import CourseList from '../../components/course/searchForm/CourseList'
 import { userInfo } from 'os';
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 400,
-  },
-  menu: {
-    width: 200,
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   container: {
+//     flexWrap: 'wrap',
+//   },
+//   textField: {
+//     marginLeft: theme.spacing(1),
+//     marginRight: theme.spacing(1),
+//     width: 400,
+//   },
+//   menu: {
+//     width: 200,
+//   },
+// }));
 
 class SearchForm extends Component {
   constructor(props) {
@@ -274,7 +274,7 @@ class SearchForm extends Component {
               </Grid>
           </div>
           </Grid>
-          <Grid item className = {classes.textField} style={{overflow: 'auto'}, {maxHeight: 200}}>
+          <Grid item  style={{overflow: 'auto'}, {maxHeight: 200}}>
             <h1>My Courses:</h1>
             <CourseList token = {this.props.token} courseSet = {this.state.courseList}></CourseList>
           </Grid>
@@ -287,4 +287,4 @@ class SearchForm extends Component {
   }
 }
 
-export default withStyles(useStyles)(withAuthSync(SearchForm));
+export default withAuthSync(SearchForm);
