@@ -136,7 +136,19 @@ class SearchForm extends Component {
           if(weekday.length>0){
             array.push(weekday);
           }
-        }else{
+        }else if(str.charAt(i)=='S'){
+          console.log("in S:"+str);
+          var weekday="";
+          if(str.charAt(i+1)=='a'){
+            weekday="Sa";
+            i++;
+          }else if(str.charAt(i+1)=='u'){
+            weekday="Su";
+            i++;
+          }
+          if(weekday.length>0){
+            array.push(weekday);
+          }}else{
           break;
         }
       }
@@ -169,7 +181,7 @@ class SearchForm extends Component {
     return course_list;
   }
 
-  handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
+  handleselectone = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
   
     if(user_id==undefined) user_id=0;
     var times="";
@@ -221,7 +233,7 @@ class SearchForm extends Component {
     console.log("courseList:"+this.state.courseList);
     return (
       <Layout title='Course' loginStatus={this.props.loginStatus} background={background}>
-        <Container maxWidth='lg' >
+        <Container maxwidth='lg' >
         <Grid container spacing={8}>
           <Grid item >
           <h1>Course Search</h1>
@@ -230,7 +242,7 @@ class SearchForm extends Component {
                 direction="row"
                 alignItems="center"
                 spacing={2}
-                maxWidth="sm" >
+                maxwidth="sm" >
                 <Grid item xs={12}>
                   <TermSelector term={this.state.term} setTerm={this.setTerm} />
                 </Grid>
@@ -242,7 +254,7 @@ class SearchForm extends Component {
                 direction="row"
                 alignItems="center"
                 spacing={2}
-                maxWidth="sm" 
+                maxwidth="sm" 
                 >
                 <Grid item xs={12}>
                   <GESelector ge={this.state.ge} setGE={this.setGE}  />
@@ -262,13 +274,14 @@ class SearchForm extends Component {
               </Grid>
           </div>
           </Grid>
-          <Grid item className = {classes.textField} spacing={2} style={{overflow: 'auto'}, {maxHeight: 200}}>
+          <Grid item className = {classes.textField} style={{overflow: 'auto'}, {maxHeight: 200}}>
             <h1>My Courses:</h1>
             <CourseList token = {this.props.token} courseSet = {this.state.courseList}></CourseList>
           </Grid>
         </Grid>
         </Container>
-        <ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term} courses = {this.state.courseList} handleSelectOne = {this.handleSelectOne}></ItemList>
+        {this.state.apiResponse!=""?(<ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term} courses = {this.state.courseList} handleselectone = {this.handleselectone.bind(this)}></ItemList>):(<div/>)}
+        {/* <ItemList token = {this.props.token} data = {this.state.apiResponse} term ={this.state.term} courses = {this.state.courseList} handleselectone = {this.handleselectone}></ItemList> */}
       </Layout>
     );
   }

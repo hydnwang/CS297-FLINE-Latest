@@ -30,7 +30,7 @@ class ItemList extends Component {
       <FormControl 
       fullWidth
       >
-        <CourseTable token = {this.props.token} users={ parseData(str)} term = {this.props.term} courses={this.props.courses} handleSelectOne = {this.props.handleSelectOne}/>
+        <CourseTable token = {this.props.token} users={ parseData(str)} term = {this.props.term} courses={this.props.courses} handleselectone = {this.props.handleselectone.bind(this)}/>
       </FormControl>
     );
   }

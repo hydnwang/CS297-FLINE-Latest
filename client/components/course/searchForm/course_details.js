@@ -102,7 +102,19 @@ class CourseDetails extends React.Component {
             if(weekday.length>0){
               array.push(weekday);
             }
-          }else{
+          }else if(str.charAt(i)=='S'){
+            console.log("in S:"+str);
+            var weekday="";
+            if(str.charAt(i+1)=='a'){
+              weekday="Sa";
+              i++;
+            }else if(str.charAt(i+1)=='u'){
+              weekday="Su";
+              i++;
+            }
+            if(weekday.length>0){
+              array.push(weekday);
+            }}else{
             break;
           }
         }
@@ -133,7 +145,7 @@ class CourseDetails extends React.Component {
       course_list.delete(parseInt(course_id));
       return course_list;
     }
-    handleSelectOne = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
+    handleselectone = (event,course_id,course_title,course_type, meeting_time,user_id,term) => {
   
       if(user_id==undefined) user_id=0;
       var times="";
@@ -198,7 +210,7 @@ class CourseDetails extends React.Component {
                     }}
                   />
                 </div>
-                <ItemList token = {this.props.user_id} data = {this.state.data} term = {this.state.term} handleSelectOne = {this.handleSelectOne} courses={this.state.courseList}/>
+                <ItemList token = {this.props.user_id} data = {this.state.data} term = {this.state.term} handleselectone = {this.handleselectone} courses={this.state.courseList}/>
               </CardContent>
             </Card>
             </div>

@@ -30,10 +30,12 @@ const getWeekDay = function(){
   var currentDate = new Date(dateOfToday);
   var timesStamp = currentDate.getTime();
   var currenDay = currentDate.getDay();
-  // console.log("今天是："+currenDay);
+  console.log("今天是："+currenDay);
   var dates = [];
+  var start_time = timesStamp - 24 * 60 * 60 * 1000 * currenDay;
+  console.log("start_time:"+start_time);
   for (var i = 0; i < 7; i++) {
-      dates.push(new Date(timesStamp + 24 * 60 * 60 * 1000 * ((currenDay + i) % 7)));
+      dates.push(new Date(start_time + 24 * 60 * 60 * 1000 * (i % 7)));
   }
   console.log("dates:"+dates);
   return dates;
@@ -85,16 +87,29 @@ const parseTime=function(data){
         day = dates[5].getDate();
         month = dates[5].getMonth();
         year = dates[5].getYear();
+      }else if(group[0]=="Sa"){
+        day = dates[6].getDate();
+        month = dates[6].getMonth();
+        year = dates[6].getYear();
+      }else if(group[0]=="Su"){
+        day = dates[0].getDate();
+        month = dates[0].getMonth();
+        year = dates[0].getYear();
       }
       var hour_slot = group[1].split(/[-:]/);
-      // console.log(hour_slot);
-      if(group[1].charAt(group[1].length-1)=="p"&&parseInt(hour_slot[0])&&parseInt(hour_slot[2])<12){
+      if(group[1].charAt(group[1].length-1)=="p"&&parseInt(hour_slot[0])>parseInt(hour_slot[2])){
+        start_hour = parseInt(hour_slot[0]);
+        start_min = parseInt(hour_slot[1]);
+        end_hour = parseInt(hour_slot[2])+12;
+        end_min = parseInt(hour_slot[3].substring(0,hour_slot[3].length-1));
+      }else if(group[1].charAt(group[1].length-1)=="p"&&(parseInt(hour_slot[0])<12&&parseInt(hour_slot[2])<12)){
         // console.log("in +12")
         start_hour = parseInt(hour_slot[0])+12;
         start_min = parseInt(hour_slot[1]);
         end_hour = parseInt(hour_slot[2])+12;
         end_min = parseInt(hour_slot[3].substring(0,hour_slot[3].length-1));
-      }else{
+      }
+      else{
         start_hour = parseInt(hour_slot[0]);
         start_min = parseInt(hour_slot[1]);
         end_hour = parseInt(hour_slot[2]);

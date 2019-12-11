@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/core/styles';
 import Router from "next/router";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,22 +6,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 const fetch = require("node-fetch");
 import querystring from 'querystring';
-const useStyles = makeStyles({
-    root: {
-        width: '100%',
-      },
-    tableWrapper: {
-        maxHeight: 440,
-        overflow: 'auto',
-      },
-    });
 
 class CourseList extends Component {
   constructor(props) {
     super(props);
-    this.state={
-        selectedIndex:0,
-    }
   }
   handleListItemClick = (event, course_id) => {
     const params={
@@ -47,41 +33,26 @@ class CourseList extends Component {
         .catch(e => console.log('错误:', e));
   };
   render() {
-    const { classes, ...rest } = this.props;
     
     var course_set = this.props.courseSet;
     var course_list=Array.from(course_set);
     return (
-        // <List
-        // component="nav"
-        // aria-labelledby="nested-list-subheader"
-        // className={classes.root}
-        // >
-        //     {/* {course_set&&course_set.map((course)=>{
-        //         return(
-        //             <ListItem>{course}</ListItem>
-        //         );
-        //     }
-        //     )} */}
-
-        // </List>
         <Paper style = {{overflowY:'auto'}}>
         <div style = {{maxHeight: 280}}> 
-            <table>
-                <List component="nav" aria-label="secondary mailbox folder">
-                    {course_list.map((course)=>(
-                        <ListItem button
-                        style={{width: '100%',}}
-                        onClick={event => this.handleListItemClick(event, course)}>
-                            <ListItemText>{course}</ListItemText>
-                        </ListItem>
-                    ))}
-                </List>
-            </table>
+          <List>
+              {course_list.map((course,i)=>(
+                  <ListItem button
+                  key={i}
+                  style={{width: '100%',}}
+                  onClick={event => this.handleListItemClick(event, course)}>
+                      <ListItemText>{course}</ListItemText>
+                  </ListItem>
+              ))}
+          </List>
         </div>
         </Paper>
     );
   }
 }
 
-export default (CourseList);
+export default CourseList;

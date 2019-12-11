@@ -71,10 +71,11 @@ const coursesTable = props => {
 
   return (
     <div>
-      {users&&users.map((user)=>(
+      {users&&users.map((user,i)=>(
         <Card
           {...rest}
           className={clsx(classes.root, className)}
+          key ={i}
         >
         <CardContent className={classes.content}>
           <p>{user.name[0]+" "+user.name[1]+" "+user.name[2]}</p>
@@ -108,7 +109,7 @@ const coursesTable = props => {
                           <Checkbox
                           color="primary"
                           checked={checkReg(props.courses,section.classCode)}
-                          onChange = {event => props.handleSelectOne(event, section.classCode, user.name, section.classType,section.meetings,user_id,term)}
+                          onChange = {event => props.handleselectone(event, section.classCode, user.name, section.classType,section.meetings,user_id,term)}
                           value="true"
                         />
                       </TableCell>
