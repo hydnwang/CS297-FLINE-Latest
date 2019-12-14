@@ -1,12 +1,16 @@
-import { AppBar, Toolbar, Link, Typography, Button, Box, Menu, MenuItem, Divider } from "@material-ui/core";
+import { logout } from '../utils/auth';
+import { 
+  AppBar, Toolbar, Link, Typography, 
+  Button, Box, Menu, MenuItem, Divider 
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import SchoolIcon from '@material-ui/icons/School';
+import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import ButtonLink from '../components/button_link';
-
 const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
@@ -19,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ loginStatus='Login' }) => {
+export default ({ loginStatus = false, currentPage }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = event => {
@@ -28,6 +32,26 @@ export default ({ loginStatus='Login' }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
+  let loginURL = '/user/login'
+  let loginButton =
+    <Button component={ButtonLink} variant="outlined" className={classes.link} href={loginURL}>
+      <ExitToAppIcon className={classes.icon} /> {'login'}
+    </Button>;
+  if (loginStatus) {
+    loginURL = ''
+    loginButton =
+      <Button variant="outlined" className={classes.link} onClick={logout}>
+        <ExitToAppIcon className={classes.icon} /> {'logout'}
+      </Button>;
+  } else if (currentPage && currentPage === 'Login') {
+    loginURL = '/user/signup'
+    loginButton =
+      <Button component={ButtonLink} variant="outlined" className={classes.link} href={loginURL}>
+        <ExitToAppIcon className={classes.icon} /> {'signup'}
+      </Button>;
+  }
+
   return (
     <Box>
     <Box display={{ xs: 'none', md: 'block' }} m={1}>
@@ -48,13 +72,17 @@ export default ({ loginStatus='Login' }) => {
             <Button component={ButtonLink} className={classes.link} href={'/course/index'}>
               <SchoolIcon className={classes.icon} /> Courses
             </Button>
+            <Button component={ButtonLink} className={classes.link} href={'/course/schedule'}>
+              <EventIcon className={classes.icon} /> Schedule
+            </Button>
             <Button component={ButtonLink} className={classes.link} href={'/user/profile'}>
               <PersonIcon className={classes.icon} /> Profile
             </Button>
           </nav>
-          <Button component={ButtonLink} variant="outlined" className={classes.link} href={'/user/login'}>
-            <ExitToAppIcon className={classes.icon} /> {loginStatus}
-          </Button>
+          {/* <Button component={ButtonLink} variant="outlined" className={classes.link} href={loginURL}>
+            <ExitToAppIcon className={classes.icon} /> {loginButton}
+          </Button> */}
+          {loginButton}
         </Toolbar>
       </AppBar>
     </Box>
@@ -93,9 +121,10 @@ export default ({ loginStatus='Login' }) => {
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleClose}>
-              <Button component={ButtonLink} variant="outlined" className={classes.link} href={'/user/login'}>
-                <ExitToAppIcon className={classes.icon} /> {loginStatus}
-              </Button>
+              {/* <Button component={ButtonLink} variant="outlined" className={classes.link} href={loginURL}>
+                <ExitToAppIcon className={classes.icon} /> {loginButton}
+              </Button> */}
+              {loginButton}
             </MenuItem>
           </Menu>
         </Toolbar>

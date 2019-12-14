@@ -1,28 +1,41 @@
+// Libraries
 import React from 'react';
-import Layout from '../../components/default_layout';
-import { 
-  Container, TextField, FormControl, IconButton, Button, 
-  Grid, InputLabel, OutlinedInput, InputAdornment, Typography, Link
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/styles';
 import fetch from 'isomorphic-unfetch';
+import { loginDir, withAuthSync } from '../../utils/auth';
+
+// Styles
+import { 
+  Container, TextField, FormControl, IconButton, 
+  Button, Grid, InputLabel, OutlinedInput, InputAdornment, 
+  Typography, Link, SnackbarContent
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import Layout from '../../components/default_layout';
+import background from '../../public/images/landing-bg.jpg';
 
 const useStyles = makeStyles(theme => ({
   form: {},
   textField: {
-    marginBottom: theme.spacing(2), 
+    margin: theme.spacing(1, 0, 2), 
   }, 
   submit: {
     margin: theme.spacing(2, 0, 2), 
   },
+  errorBar: {
+    backgroundColor: theme.palette.error.dark, 
+  }
 }));
 
+// Components
 function FormComponent() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    email: '', 
+    username: '', 
     password: '',
+    error: '', 
+    usernameErr: '',
+    passwordErr: '', 
     showPassword: false,
   });
   const handleChange = prop => event => {
@@ -36,24 +49,49 @@ function FormComponent() {
   };
   const handleSubmit = async event => {
     event.preventDefault()
-    console.log("email: " + values.email);
-    console.log("password: " + values.password);
-    fetch('/api/users/login', {
-      method: 'POST', 
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json', 
-      }, 
-      body: JSON.stringify({
-        email: values.email
+    const { username, password } = values;
+    if (!username || !password) {
+      // setValues( Object.assign({}, values, {error: 'Missing Information'})) 
+      if (!username) {setValues(prev=>({...prev,usernameErr:'Please enter email'}))}
+      if (!password) {setValues(prev=>({...prev,passwordErr:'Please enter password'}))}
+      return
+    }
+    
+    const loginURL = '/api/users/login';
+    try {
+      const res = await fetch(loginURL, {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ username, password })
       })
-    })
-    .then(res => res.json())
-    .then(data => console.log("[data]" + JSON.stringify(data)))
-    .catch(err => console.log("[err]" + err))
+      if (res.status == 200) {
+        const { userId } = await res.json()
+        await loginDir({ token: userId, path: '/' })
+      } else {
+        let err = new Error(res.statusText)
+        err.response = res
+        throw err
+      }
+    } catch (error) {
+      const { response } = error
+      setValues( Object.assign({}, values, { 
+        error: response ? response.statusText : error.message,
+      }))
+    }
   };
+
   return (
     <form className={classes.form} noValidate autoComplete="off">
+      {values.error &&
+        <SnackbarContent
+          className={classes.errorBar}
+          message={`Error: ${values.error}`}
+        />}
+      {values.usernameErr &&
+        <SnackbarContent
+          className={classes.errorBar}
+          message={`Error: ${values.usernameErr}`}
+        />}
       <TextField
         id="email"
         margin="normal"
@@ -63,8 +101,14 @@ function FormComponent() {
         variant="outlined"
         helperText="Your email will be your login account"
         className={classes.textField}
-        onChange={handleChange('email')}
+        value={values.username}
+        onChange={handleChange('username')}
       />
+      {values.passwordErr &&
+        <SnackbarContent
+          className={classes.errorBar}
+          message={`Error: ${values.passwordErr}`}
+        />}
       <FormControl required fullWidth className={classes.textField} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
         <OutlinedInput
@@ -115,9 +159,10 @@ function FormComponent() {
   );
 }
 
+// Main
  const Login = props => {
   return (
-    <Layout title="Login">
+    <Layout title="Login" loginStatus={props.loginStatus} background={background}>
       <Container maxWidth="sm" style={{ flex: 1 }}>
         <h1>User Login</h1>
         <FormComponent />
@@ -126,4 +171,4 @@ function FormComponent() {
   );
 }
 
-export default Login
+export default withAuthSync(Login)
