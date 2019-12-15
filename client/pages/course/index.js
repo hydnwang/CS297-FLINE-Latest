@@ -99,7 +99,7 @@ class SearchForm extends Component {
     const params={
       user_id:this.props.token,
     };
-    const url = 'http://localhost:3000/api/schedule?'+ querystring.stringify(params);
+    const url = '/api/schedule?'+ querystring.stringify(params);
     console.log(url);
     fetch(url)
       .then(res => res.json())

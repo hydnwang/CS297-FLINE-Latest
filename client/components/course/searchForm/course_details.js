@@ -66,7 +66,7 @@ class CourseDetails extends React.Component {
         const params2={
           user_id:this.props.user_id,
         };
-        const url2 = 'http://localhost:3000/api/schedule?'+ querystring.stringify(params2);
+        const url2 = '/api/schedule?'+ querystring.stringify(params2);
         console.log(url2);
         fetch(url2)
           .then(res => res.json())

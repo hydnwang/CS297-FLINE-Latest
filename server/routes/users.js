@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const userModel = require('../models/users')
 const path = require('path')
-const BASE_UPLOAD_URL = 'http://localhost:3000/static/uploads'
+const BASE_UPLOAD_URL = ' /static/uploads'
 const BASE_UPLOAD_FOLDER = '/client/static/uploads'
 
 router.get('/all', function (req, res) {

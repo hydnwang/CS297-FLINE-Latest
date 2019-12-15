@@ -16,7 +16,9 @@ export const login = ({ token }) => {
 
 const redirectTo = (ctx={}, pathname) => {
     if (typeof window === 'undefined') {
-        ctx.res.writeHead(302, { Location: pathname })
+        if (typeof ctx.res.writeHead === 'function') {
+            ctx.res.writeHead(302, { Location: pathname })
+        }
         ctx.res.end()
     } else {
         Router.push(pathname)

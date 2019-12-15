@@ -16,7 +16,7 @@ class CourseList extends Component {
         course_id:course_id,
         user_id: this.props.token,
       };
-      const url = 'http://localhost:3000/api/registration?'+ querystring.stringify(params);
+      const url = '/api/registration?'+ querystring.stringify(params);
       console.log(url);
       fetch(url)
         .then(res => res.json())

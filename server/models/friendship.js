@@ -115,7 +115,9 @@ var discoverFriendsEnrollment = function (uid, callback) {
 var requestFriend = function (from, to) {
     let queryStr = "INSERT INTO friendship (from_id, to_id, status) values (" + from + ", " + to + ", 'pending')";
     sql.query(queryStr, function (error, results, fields) {
-        if (error) throw error;
+        if (error) {
+            console.log("ERRER: request friend")
+        };
     });
 }
 
@@ -123,9 +125,13 @@ var acceptFriend = function (from, to) {
     let queryStr = "UPDATE friendship SET status='friend' WHERE from_id=" + from + " AND to_id=" + to;
     let queryStr2 = "INSERT INTO friendship (from_id, to_id, status) values (" + to + ", " + from + ", 'friend')";
     sql.query(queryStr, function (error, results, fields) {
-        if (error) throw error;
+        if (error) {
+            console.log("ERRER: accept friend error")
+        };
         sql.query(queryStr2, function (error, results, fields) {
-            if (error) throw error;
+            if (error) {
+                console.log("ERRER: accept friend error")
+            };
         });
     });
 }
