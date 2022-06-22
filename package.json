@@ -15,7 +15,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.33",
     "@material-ui/styles": "^4.6.0",
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.3",
     "classnames": "^2.2.6",
